@@ -37,6 +37,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase App SDK & Firestore Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
         body { font-family: 'Inter', sans-serif; }
         .blue-gradient {
@@ -129,16 +134,13 @@
 
     <!-- HERO SECTION -->
     <section id="inicio" class="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-dark-900">
-        <!-- Marca de agua de fondo -->
         <div class="watermark-bg">Lucas Robledo Barbershop</div>
 
-        <!-- Background Fusion Effect -->
         <div class="absolute inset-0 opacity-15 mix-blend-luminosity bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1600&auto=format&fit=crop');"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/90 to-dark-900/60"></div>
         <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center z-10">
-            <!-- Badge con movimiento/animación -->
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-dark-800 border border-blue-500/40 text-blue-400 text-xs sm:text-sm font-medium mb-6 shadow-md backdrop-blur-sm animate-pulse-slow">
                 <i class="fa-solid fa-certificate"></i> Certificado Profesional avalado por Lionel Ferro • Paso de los Libres
             </div>
@@ -161,7 +163,6 @@
                 </a>
             </div>
 
-            <!-- Trust Badges -->
             <div class="mt-16 grid grid-cols-3 gap-4 max-w-2xl mx-auto border-t border-zinc-800/80 pt-8">
                 <div class="text-center">
                     <span class="block font-serif text-2xl sm:text-3xl font-bold text-blue-400">100%</span>
@@ -184,7 +185,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                <!-- Left: Certificate Showcase -->
                 <div class="lg:col-span-6">
                     <div class="relative group">
                         <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-700 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
@@ -223,7 +223,6 @@
                     </div>
                 </div>
 
-                <!-- Right: About description -->
                 <div class="lg:col-span-6 space-y-6">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-semibold uppercase tracking-wider">
                         Pasión & Profesionalismo
@@ -277,7 +276,6 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <!-- Service 1: Corte Clásico -->
                 <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
                     <div>
@@ -298,7 +296,6 @@
                     </div>
                 </div>
 
-                <!-- Service 2: Perfilado y Barba -->
                 <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
                     <div>
@@ -319,7 +316,6 @@
                     </div>
                 </div>
 
-                <!-- Service 3: Combo Completo (Featured) -->
                 <div class="bg-gradient-to-b from-dark-800 to-dark-700 rounded-3xl p-6 sm:p-7 border-2 border-blue-500 shadow-xl shadow-blue-500/15 flex flex-col justify-between group relative overflow-hidden transform lg:-translate-y-2">
                     <div class="absolute top-3 right-3 bg-blue-600 text-white font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow">
                         Más Popular
@@ -342,7 +338,6 @@
                     </div>
                 </div>
 
-                <!-- Service 4: Styling y Cejas -->
                 <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
                     <div>
@@ -378,9 +373,7 @@
 
             <div class="bg-dark-900 border border-zinc-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
                 
-                <!-- Booking Form -->
                 <form id="booking-form" onsubmit="handleBooking(event)" class="space-y-6">
-                    
                     <div>
                         <label class="block text-sm font-semibold text-zinc-300 mb-2">1. Selecciona el Servicio</label>
                         <select id="service-select" required onchange="updateServicePrice()" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
@@ -430,10 +423,8 @@
                             <i class="fa-solid fa-check-circle text-lg"></i> Confirmar Mi Turno
                         </button>
                     </div>
-
                 </form>
 
-                <!-- Success State -->
                 <div id="booking-success" class="hidden text-center py-10 space-y-6">
                     <div class="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center text-blue-400 text-3xl mx-auto animate-bounce shadow-lg">
                         <i class="fa-solid fa-check"></i>
@@ -466,7 +457,6 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Image 1: Certificado Oficial -->
                 <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
                     <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="Certificado Oficial" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
@@ -477,7 +467,6 @@
                     </div>
                 </div>
 
-                <!-- Image 2: Fade / Degradado -->
                 <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
                     <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=800&auto=format&fit=crop" alt="Corte Moderno y Fade" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
@@ -488,7 +477,6 @@
                     </div>
                 </div>
 
-                <!-- Image 3: Perfilado de Cejas y Barba -->
                 <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
                     <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=80&w=800&auto=format&fit=crop" alt="Perfilado y Cejas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
@@ -556,7 +544,6 @@
                     </div>
                 </div>
 
-                <!-- Map Card -->
                 <div class="bg-dark-900 border border-zinc-800 rounded-3xl p-6 h-96 flex flex-col justify-between relative overflow-hidden shadow-2xl">
                     <div class="absolute inset-0 opacity-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop');"></div>
                     <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/50 to-transparent"></div>
@@ -588,7 +575,7 @@
         </div>
     </footer>
 
-    <!-- PIN MODAL FOR ADMIN ACCESS (Sofisticado y sin revelar el PIN) -->
+    <!-- PIN MODAL FOR ADMIN ACCESS -->
     <div id="pin-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
             <div class="flex items-center justify-between pb-4 border-b border-zinc-700 mb-6">
@@ -617,7 +604,7 @@
         </div>
     </div>
 
-    <!-- ADMIN MODAL (PIN: 30102003) -->
+    <!-- ADMIN MODAL -->
     <div id="admin-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-4 border-b border-zinc-700 mb-6">
@@ -633,14 +620,14 @@
             <div class="space-y-4 mb-6">
                 <div class="flex items-center justify-between bg-dark-900 p-4 rounded-2xl border border-zinc-700/80">
                     <div>
-                        <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Estado del Sistema</span>
-                        <p class="text-sm text-zinc-300">Turnos agendados por clientes</p>
+                        <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Estado del Sistema (Nube)</span>
+                        <p class="text-sm text-zinc-300">Turnos agendados sincronizados</p>
                     </div>
                     <span id="turnos-count" class="bg-blue-500/20 text-blue-400 font-bold px-3.5 py-1.5 rounded-xl text-sm border border-blue-500/30">0 turnos</span>
                 </div>
 
                 <div id="admin-turnos-list" class="space-y-3">
-                    <!-- Populated via JS -->
+                    <!-- Populated via Firebase -->
                 </div>
             </div>
 
@@ -655,8 +642,23 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC WITH FIREBASE -->
     <script>
+        // Configuración de Firebase integrada con tus credenciales reales
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfVcjUdDXs-8SVMPkUoqzN4YuyPPPkOcs",
+            authDomain: "lucas-robledo-barbershop.firebaseapp.com",
+            projectId: "lucas-robledo-barbershop",
+            storageBucket: "lucas-robledo-barbershop.firebasestorage.app",
+            messagingSenderId: "973219962522",
+            appId: "1:973219962522:web:714be86853d5f7488f0923",
+            measurementId: "G-Z82TT4J53B"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // Mobile menu toggle
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -671,12 +673,10 @@
             });
         });
 
-        // Set default date to today for booking
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('booking-date').min = today;
         document.getElementById('booking-date').value = today;
 
-        // Update price when service select changes
         function updateServicePrice() {
             const select = document.getElementById('service-select');
             const selectedOption = select.options[select.selectedIndex];
@@ -684,7 +684,6 @@
             document.getElementById('price-display').innerText = '$' + Number(price).toLocaleString('es-AR');
         }
 
-        // Select service and scroll to booking form
         function selectServiceAndScroll(serviceName, price) {
             const select = document.getElementById('service-select');
             for (let i = 0; i < select.options.length; i++) {
@@ -697,8 +696,8 @@
             document.getElementById('reserva').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Handle Booking Form Submission
-        function handleBooking(event) {
+        // Guardar turno en Firestore (Nube)
+        async function handleBooking(event) {
             event.preventDefault();
 
             const service = document.getElementById('service-select').value;
@@ -708,30 +707,28 @@
             const phone = document.getElementById('client-phone').value;
 
             const turno = {
-                id: Date.now(),
                 service,
                 date,
                 time,
                 name,
                 phone,
-                createdAt: new Date().toLocaleString()
+                createdAt: new Date().toISOString()
             };
 
-            // Save to localStorage
-            let turnos = JSON.parse(localStorage.getItem('lucas_robledo_turnos')) || [];
-            turnos.push(turno);
-            localStorage.setItem('lucas_robledo_turnos', JSON.stringify(turnos));
+            try {
+                await db.collection('turnos').add(turno);
 
-            // Update success details text
-            document.getElementById('success-details').innerHTML = `¡Gracias <strong>${name}</strong>! Tu turno para <strong>${service}</strong> el día <strong>${date}</strong> a las <strong>${time} hs</strong> ha sido registrado correctamente.`;
+                document.getElementById('success-details').innerHTML = `¡Gracias <strong>${name}</strong>! Tu turno para <strong>${service}</strong> el día <strong>${date}</strong> a las <strong>${time} hs</strong> ha sido registrado correctamente.`;
 
-            // Setup WhatsApp confirmation button link
-            const waText = encodeURIComponent(`Hola Lucas! Reservé un turno online para ${service} el día ${date} a las ${time} hs. Mi nombre es ${name} (${phone}).`);
-            document.getElementById('whatsapp-confirm-btn').href = `https://wa.me/5493772449950?text=${waText}`;
+                const waText = encodeURIComponent(`Hola Lucas! Reservé un turno online para ${service} el día ${date} a las ${time} hs. Mi nombre es ${name} (${phone}).`);
+                document.getElementById('whatsapp-confirm-btn').href = `https://wa.me/5493772449950?text=${waText}`;
 
-            // Toggle view
-            document.getElementById('booking-form').classList.add('hidden');
-            document.getElementById('booking-success').classList.remove('hidden');
+                document.getElementById('booking-form').classList.add('hidden');
+                document.getElementById('booking-success').classList.remove('hidden');
+            } catch (error) {
+                console.error("Error al guardar el turno: ", error);
+                alert("Hubo un error al registrar el turno. Inténtalo de nuevo.");
+            }
         }
 
         function resetBookingForm() {
@@ -777,49 +774,75 @@
             document.getElementById('admin-modal').classList.add('hidden');
         }
 
-        function renderAdminTurnos() {
+        // Cargar turnos desde Firestore (Nube)
+        async function renderAdminTurnos() {
             const container = document.getElementById('admin-turnos-list');
-            const turnos = JSON.parse(localStorage.getItem('lucas_robledo_turnos')) || [];
-            document.getElementById('turnos-count').innerText = turnos.length + (turnos.length === 1 ? ' turno' : ' turnos');
+            container.innerHTML = `<p class="text-zinc-400 text-sm text-center py-4">Cargando turnos desde la nube...</p>`;
 
-            if (turnos.length === 0) {
-                container.innerHTML = `<p class="text-zinc-500 text-sm text-center py-8">No hay turnos agendados todavía.</p>`;
-                return;
-            }
+            try {
+                const querySnapshot = await db.collection('turnos').get();
+                let turnos = [];
+                querySnapshot.forEach((doc) => {
+                    turnos.push({ id: doc.id, ...doc.data() });
+                });
 
-            container.innerHTML = turnos.map(t => `
-                <div class="bg-dark-900 border border-zinc-700/80 p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="font-bold text-zinc-100 text-sm">${t.name}</span>
-                            <span class="bg-blue-500/10 text-blue-400 text-[10px] px-2 py-0.5 rounded border border-blue-500/20">${t.service}</span>
+                document.getElementById('turnos-count').innerText = turnos.length + (turnos.length === 1 ? ' turno' : ' turnos');
+
+                if (turnos.length === 0) {
+                    container.innerHTML = `<p class="text-zinc-500 text-sm text-center py-8">No hay turnos agendados todavía.</p>`;
+                    return;
+                }
+
+                container.innerHTML = turnos.map(t => `
+                    <div class="bg-dark-900 border border-zinc-700/80 p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-bold text-zinc-100 text-sm">${t.name}</span>
+                                <span class="bg-blue-500/10 text-blue-400 text-[10px] px-2 py-0.5 rounded border border-blue-500/20">${t.service}</span>
+                            </div>
+                            <p class="text-xs text-zinc-300 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${t.date} a las <span class="text-blue-400 font-semibold">${t.time} hs</span></p>
+                            <p class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Teléfono: ${t.phone}</p>
                         </div>
-                        <p class="text-xs text-zinc-300 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${t.date} a las <span class="text-blue-400 font-semibold">${t.time} hs</span></p>
-                        <p class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Teléfono: ${t.phone}</p>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-800">
+                            <a href="https://wa.me/549${t.phone.replace(/\D/g,'')}?text=Hola%20${encodeURIComponent(t.name)},%20te%20escribo%20de%20Lucas%20Robledo%20Barbershop%20por%20tu%20turno%20el%20${t.date}%20a%20las%20${t.time}%20hs." target="_blank" class="text-emerald-400 hover:text-emerald-300 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl border border-emerald-500/20 transition-colors flex items-center gap-1.5 font-medium">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> Contactar
+                            </a>
+                            <button onclick="deleteTurno('${t.id}')" class="text-red-400 hover:text-red-300 text-xs bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl border border-red-500/20 transition-colors font-medium">
+                                Eliminar
+                            </button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-800">
-                        <a href="https://wa.me/549${t.phone.replace(/\D/g,'')}?text=Hola%20${encodeURIComponent(t.name)},%20te%20escribo%20de%20Lucas%20Robledo%20Barbershop%20por%20tu%20turno%20el%20${t.date}%20a%20las%20${t.time}%20hs." target="_blank" class="text-emerald-400 hover:text-emerald-300 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl border border-emerald-500/20 transition-colors flex items-center gap-1.5 font-medium">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> Contactar
-                        </a>
-                        <button onclick="deleteTurno(${t.id})" class="text-red-400 hover:text-red-300 text-xs bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl border border-red-500/20 transition-colors font-medium">
-                            Eliminar
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
+            } catch (error) {
+                console.error("Error al cargar turnos: ", error);
+                container.innerHTML = `<p class="text-red-400 text-sm text-center py-4">Error al cargar los turnos desde la nube.</p>`;
+            }
         }
 
-        function deleteTurno(id) {
-            let turnos = JSON.parse(localStorage.getItem('lucas_robledo_turnos')) || [];
-            turnos = turnos.filter(t => t.id !== id);
-            localStorage.setItem('lucas_robledo_turnos', JSON.stringify(turnos));
-            renderAdminTurnos();
+        async function deleteTurno(id) {
+            if (confirm('¿Estás seguro de eliminar este turno?')) {
+                try {
+                    await db.collection('turnos').doc(id).delete();
+                    renderAdminTurnos();
+                } catch (error) {
+                    console.error("Error al eliminar el turno: ", error);
+                }
+            }
         }
 
-        function clearAllTurnos() {
-            if (confirm('¿Estás seguro de borrar todos los turnos guardados?')) {
-                localStorage.removeItem('lucas_robledo_turnos');
-                renderAdminTurnos();
+        async function clearAllTurnos() {
+            if (confirm('¿Estás seguro de borrar TODOS los turnos de la base de datos?')) {
+                try {
+                    const querySnapshot = await db.collection('turnos').get();
+                    const batch = db.batch();
+                    querySnapshot.forEach((doc) => {
+                        batch.delete(doc.ref);
+                    });
+                    await batch.commit();
+                    renderAdminTurnos();
+                } catch (error) {
+                    console.error("Error al borrar todos los turnos: ", error);
+                }
             }
         }
     </script>
