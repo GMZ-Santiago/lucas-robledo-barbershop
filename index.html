@@ -276,6 +276,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
+                <!-- Service 1 -->
                 <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
                     <div>
@@ -288,14 +289,15 @@
                     <div>
                         <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
                             <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 30 min</span>
-                            <span class="font-serif text-2xl font-bold text-blue-400">$8.000</span>
+                            <span id="price-card-Corte Clásico" class="font-serif text-2xl font-bold text-blue-400">$8.000</span>
                         </div>
-                        <button onclick="selectServiceAndScroll('Corte Clásico', 8000)" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
+                        <button onclick="selectServiceAndScroll('Corte Clásico')" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
                             Reservar Este
                         </button>
                     </div>
                 </div>
 
+                <!-- Service 2 -->
                 <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
                     <div>
@@ -308,14 +310,15 @@
                     <div>
                         <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
                             <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 25 min</span>
-                            <span class="font-serif text-2xl font-bold text-blue-400">$5.000</span>
+                            <span id="price-card-Perfilado y Barba" class="font-serif text-2xl font-bold text-blue-400">$5.000</span>
                         </div>
-                        <button onclick="selectServiceAndScroll('Perfilado y Barba', 5000)" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
+                        <button onclick="selectServiceAndScroll('Perfilado y Barba')" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
                             Reservar Este
                         </button>
                     </div>
                 </div>
 
+                <!-- Service 3 -->
                 <div class="bg-gradient-to-b from-dark-800 to-dark-700 rounded-3xl p-6 sm:p-7 border-2 border-blue-500 shadow-xl shadow-blue-500/15 flex flex-col justify-between group relative overflow-hidden transform lg:-translate-y-2">
                     <div class="absolute top-3 right-3 bg-blue-600 text-white font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow">
                         Más Popular
@@ -330,14 +333,15 @@
                     <div>
                         <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-600">
                             <span class="text-xs text-zinc-300"><i class="fa-regular fa-clock mr-1"></i> 50 min</span>
-                            <span class="font-serif text-2xl font-bold text-blue-400">$12.000</span>
+                            <span id="price-card-Combo Completo" class="font-serif text-2xl font-bold text-blue-400">$12.000</span>
                         </div>
-                        <button onclick="selectServiceAndScroll('Combo Completo', 12000)" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3 rounded-2xl transition-all text-sm shadow-lg">
+                        <button onclick="selectServiceAndScroll('Combo Completo')" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3 rounded-2xl transition-all text-sm shadow-lg">
                             Reservar Combo
                         </button>
                     </div>
                 </div>
 
+                <!-- Service 4 -->
                 <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
                     <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
                     <div>
@@ -350,9 +354,9 @@
                     <div>
                         <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
                             <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 20 min</span>
-                            <span class="font-serif text-2xl font-bold text-blue-400">$3.000</span>
+                            <span id="price-card-Styling y Cejas" class="font-serif text-2xl font-bold text-blue-400">$3.000</span>
                         </div>
-                        <button onclick="selectServiceAndScroll('Styling y Cejas', 3000)" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
+                        <button onclick="selectServiceAndScroll('Styling y Cejas')" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
                             Reservar Este
                         </button>
                     </div>
@@ -377,10 +381,10 @@
                     <div>
                         <label class="block text-sm font-semibold text-zinc-300 mb-2">1. Selecciona el Servicio</label>
                         <select id="service-select" required onchange="updateServicePrice()" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
-                            <option value="Corte Clásico" data-price="8000">Corte Clásico ($8.000 - 30 min)</option>
-                            <option value="Perfilado y Barba" data-price="5000">Perfilado y Barba ($5.000 - 25 min)</option>
-                            <option value="Combo Completo" data-price="12000" selected>Combo Completo (Corte + Barba) ($12.000 - 50 min)</option>
-                            <option value="Styling y Cejas" data-price="3000">Styling y Cejas ($3.000 - 20 min)</option>
+                            <option value="Corte Clásico">Corte Clásico (30 min)</option>
+                            <option value="Perfilado y Barba">Perfilado y Barba (25 min)</option>
+                            <option value="Combo Completo" selected>Combo Completo (Corte + Barba) (50 min)</option>
+                            <option value="Styling y Cejas">Styling y Cejas (20 min)</option>
                         </select>
                     </div>
 
@@ -617,11 +621,28 @@
                 </button>
             </div>
 
-            <div class="space-y-4 mb-6">
+            <div class="space-y-6 mb-6">
+                <!-- SECCIÓN 1: GESTIÓN DE PRECIOS -->
+                <div class="bg-dark-900 p-4 rounded-2xl border border-zinc-700/80 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Gestión de Precios</span>
+                            <p class="text-xs text-zinc-400">Modifica los valores vigentes de los servicios</p>
+                        </div>
+                        <button onclick="savePrices()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition-all">
+                            Guardar Precios
+                        </button>
+                    </div>
+                    <div id="admin-prices-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <!-- Inputs generados por JS -->
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: TURNOS AGENDADOS -->
                 <div class="flex items-center justify-between bg-dark-900 p-4 rounded-2xl border border-zinc-700/80">
                     <div>
-                        <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Estado del Sistema (Nube)</span>
-                        <p class="text-sm text-zinc-300">Turnos agendados sincronizados</p>
+                        <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Estado de Turnos (Nube)</span>
+                        <p class="text-sm text-zinc-300">Turnos agendados por clientes</p>
                     </div>
                     <span id="turnos-count" class="bg-blue-500/20 text-blue-400 font-bold px-3.5 py-1.5 rounded-xl text-sm border border-blue-500/30">0 turnos</span>
                 </div>
@@ -635,16 +656,30 @@
                 <button onclick="clearAllTurnos()" class="w-full sm:w-auto text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-4 py-2.5 rounded-xl transition-colors bg-red-500/10">
                     Borrar Todos los Turnos
                 </button>
-                <button onclick="closeAdminModal()" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
+                <button onclick="closeAdminModal()" class="w-full sm:w-auto bg-dark-700 hover:bg-dark-600 text-zinc-200 font-semibold px-6 py-2.5 rounded-xl text-sm">
                     Cerrar Panel
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC WITH FIREBASE -->
+    <!-- CUSTOM NOTIFICATION MODAL (Reemplazo sofisticado del alert nativo) -->
+    <div id="custom-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative space-y-4">
+            <div class="w-14 h-14 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center text-blue-400 text-2xl mx-auto shadow-inner">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 id="custom-modal-title" class="font-serif text-xl font-bold text-zinc-100">¡Éxito!</h3>
+            <p id="custom-modal-text" class="text-xs sm:text-sm text-zinc-300 leading-relaxed">Los cambios se guardaron correctamente.</p>
+            <button onclick="closeCustomModal()" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC WITH FIREBASE & CUSTOM MODAL -->
     <script>
-        // Configuración de Firebase integrada con tus credenciales reales
+        // Configuración de Firebase integrada
         const firebaseConfig = {
             apiKey: "AIzaSyAfVcjUdDXs-8SVMPkUoqzN4YuyPPPkOcs",
             authDomain: "lucas-robledo-barbershop.firebaseapp.com",
@@ -658,6 +693,51 @@
         // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
+        // Precios por defecto
+        let currentPrices = {
+            "Corte Clásico": 8000,
+            "Perfilado y Barba": 5000,
+            "Combo Completo": 12000,
+            "Styling y Cejas": 3000
+        };
+
+        // Funciones para manejar la ventana flotante personalizada (Custom Modal)
+        function showCustomModal(title, text) {
+            document.getElementById('custom-modal-title').innerText = title;
+            document.getElementById('custom-modal-text').innerText = text;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Cargar precios al iniciar la página
+        async function fetchPrices() {
+            try {
+                const doc = await db.collection('settings').doc('prices').get();
+                if (doc.exists) {
+                    currentPrices = doc.data();
+                } else {
+                    await db.collection('settings').doc('prices').set(currentPrices);
+                }
+                updateUIWithPrices();
+            } catch (error) {
+                console.error("Error al cargar precios:", error);
+                updateUIWithPrices();
+            }
+        }
+
+        function updateUIWithPrices() {
+            for (const [service, price] of Object.entries(currentPrices)) {
+                const cardSpan = document.getElementById(`price-card-${service}`);
+                if (cardSpan) {
+                    cardSpan.innerText = '$' + Number(price).toLocaleString('es-AR');
+                }
+            }
+            updateServicePrice();
+        }
 
         // Mobile menu toggle
         const menuBtn = document.getElementById('menu-btn');
@@ -679,12 +759,12 @@
 
         function updateServicePrice() {
             const select = document.getElementById('service-select');
-            const selectedOption = select.options[select.selectedIndex];
-            const price = selectedOption.getAttribute('data-price');
+            const selectedService = select.value;
+            const price = currentPrices[selectedService] || 0;
             document.getElementById('price-display').innerText = '$' + Number(price).toLocaleString('es-AR');
         }
 
-        function selectServiceAndScroll(serviceName, price) {
+        function selectServiceAndScroll(serviceName) {
             const select = document.getElementById('service-select');
             for (let i = 0; i < select.options.length; i++) {
                 if (select.options[i].value === serviceName) {
@@ -696,7 +776,6 @@
             document.getElementById('reserva').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Guardar turno en Firestore (Nube)
         async function handleBooking(event) {
             event.preventDefault();
 
@@ -705,6 +784,7 @@
             const time = document.getElementById('booking-time').value;
             const name = document.getElementById('client-name').value;
             const phone = document.getElementById('client-phone').value;
+            const pricePaid = currentPrices[service] || 0;
 
             const turno = {
                 service,
@@ -712,22 +792,23 @@
                 time,
                 name,
                 phone,
+                price: pricePaid,
                 createdAt: new Date().toISOString()
             };
 
             try {
                 await db.collection('turnos').add(turno);
 
-                document.getElementById('success-details').innerHTML = `¡Gracias <strong>${name}</strong>! Tu turno para <strong>${service}</strong> el día <strong>${date}</strong> a las <strong>${time} hs</strong> ha sido registrado correctamente.`;
+                document.getElementById('success-details').innerHTML = `¡Gracias <strong>${name}</strong>! Tu turno para <strong>${service}</strong> ($${Number(pricePaid).toLocaleString('es-AR')}) el día <strong>${date}</strong> a las <strong>${time} hs</strong> ha sido registrado correctamente.`;
 
-                const waText = encodeURIComponent(`Hola Lucas! Reservé un turno online para ${service} el día ${date} a las ${time} hs. Mi nombre es ${name} (${phone}).`);
+                const waText = encodeURIComponent(`Hola Lucas! Reservé un turno online para ${service} ($${Number(pricePaid).toLocaleString('es-AR')}) el día ${date} a las ${time} hs. Mi nombre es ${name} (${phone}).`);
                 document.getElementById('whatsapp-confirm-btn').href = `https://wa.me/5493772449950?text=${waText}`;
 
                 document.getElementById('booking-form').classList.add('hidden');
                 document.getElementById('booking-success').classList.remove('hidden');
             } catch (error) {
                 console.error("Error al guardar el turno: ", error);
-                alert("Hubo un error al registrar el turno. Inténtalo de nuevo.");
+                showCustomModal("Error", "Hubo un problema al registrar el turno. Inténtalo de nuevo.");
             }
         }
 
@@ -759,13 +840,14 @@
                 closePinModal();
                 openAdminModal();
             } else {
-                alert("PIN incorrecto. Acceso denegado.");
+                showCustomModal("Acceso Denegado", "PIN incorrecto. Verifica el código e intenta nuevamente.");
                 document.getElementById('pin-input').value = '';
                 document.getElementById('pin-input').focus();
             }
         }
 
         function openAdminModal() {
+            renderAdminPricesForm();
             renderAdminTurnos();
             document.getElementById('admin-modal').classList.remove('hidden');
         }
@@ -774,7 +856,37 @@
             document.getElementById('admin-modal').classList.add('hidden');
         }
 
-        // Cargar turnos desde Firestore (Nube)
+        function renderAdminPricesForm() {
+            const container = document.getElementById('admin-prices-container');
+            container.innerHTML = Object.entries(currentPrices).map(([service, price]) => `
+                <div class="bg-dark-800 p-3 rounded-xl border border-zinc-700">
+                    <label class="block text-xs font-semibold text-zinc-300 mb-1">${service}</label>
+                    <input type="number" id="price-input-${service}" value="${price}" class="w-full bg-dark-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-sm focus:outline-none focus:border-blue-500">
+                </div>
+            `).join('');
+        }
+
+        // Guardar nuevos precios en Firestore usando la ventana flotante
+        async function savePrices() {
+            try {
+                let updatedPrices = {};
+                for (const service of Object.keys(currentPrices)) {
+                    const inputVal = document.getElementById(`price-input-${service}`).value;
+                    updatedPrices[service] = Number(inputVal);
+                }
+
+                await db.collection('settings').doc('prices').set(updatedPrices);
+                currentPrices = updatedPrices;
+                updateUIWithPrices();
+                
+                // Ventana flotante moderna de éxito
+                showCustomModal("¡Precios Actualizados!", "Los nuevos valores de los servicios se guardaron correctamente en la nube.");
+            } catch (error) {
+                console.error("Error al guardar precios:", error);
+                showCustomModal("Error", "Hubo un problema al guardar los precios.");
+            }
+        }
+
         async function renderAdminTurnos() {
             const container = document.getElementById('admin-turnos-list');
             container.innerHTML = `<p class="text-zinc-400 text-sm text-center py-4">Cargando turnos desde la nube...</p>`;
@@ -798,7 +910,7 @@
                         <div>
                             <div class="flex items-center gap-2 flex-wrap">
                                 <span class="font-bold text-zinc-100 text-sm">${t.name}</span>
-                                <span class="bg-blue-500/10 text-blue-400 text-[10px] px-2 py-0.5 rounded border border-blue-500/20">${t.service}</span>
+                                <span class="bg-blue-500/10 text-blue-400 text-[10px] px-2 py-0.5 rounded border border-blue-500/20">${t.service} ${t.price ? '($' + Number(t.price).toLocaleString('es-AR') + ')' : ''}</span>
                             </div>
                             <p class="text-xs text-zinc-300 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${t.date} a las <span class="text-blue-400 font-semibold">${t.time} hs</span></p>
                             <p class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Teléfono: ${t.phone}</p>
@@ -845,6 +957,10 @@
                 }
             }
         }
+
+        window.onload = () => {
+            fetchPrices();
+        };
     </script>
 </body>
 </html>
