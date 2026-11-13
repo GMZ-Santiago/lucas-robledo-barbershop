@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lucas Robledo | Barbershop en Paso de los Libres</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blue: {
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            DEFAULT: '#3b82f6'
+                        },
+                        dark: {
+                            900: '#06090f',
+                            800: '#0f172a',
+                            700: '#1e293b',
+                            600: '#334155',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .blue-gradient {
+            background: linear-gradient(135deg, #93c5fd 0%, #3b82f6 50%, #1d4ed8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3.5s infinite ease-in-out;
+        }
+        .watermark-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-12deg);
+            font-size: 7vw;
+            font-weight: 900;
+            color: rgba(59, 130, 246, 0.025);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+            text-transform: uppercase;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #06090f; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+    </style>
+</head>
+<body class="bg-dark-900 text-zinc-100 antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- HEADER / NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-dark-900/95 backdrop-blur-md border-b border-zinc-800 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between py-3">
+            <a href="#inicio" class="flex items-center space-x-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
+                    LR
+                </div>
+                <div>
+                    <span class="block font-serif text-base sm:text-lg font-bold tracking-wider text-zinc-100">LUCAS ROBLEDO</span>
+                    <span class="block text-[10px] sm:text-xs uppercase tracking-widest text-blue-400 font-semibold">Barbershop • Libres</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#inicio" class="text-zinc-300 hover:text-blue-400 transition-colors">Inicio</a>
+                <a href="#sobre-mi" class="text-zinc-300 hover:text-blue-400 transition-colors">Certificado & Historia</a>
+                <a href="#servicios" class="text-zinc-300 hover:text-blue-400 transition-colors">Servicios & Precios</a>
+                <a href="#reserva" class="text-zinc-300 hover:text-blue-400 transition-colors">Reservar Turno</a>
+                <a href="#galeria" class="text-zinc-300 hover:text-blue-400 transition-colors">Galería</a>
+                <a href="#contacto" class="text-zinc-300 hover:text-blue-400 transition-colors">Ubicación</a>
+            </nav>
+
+            <div class="hidden md:flex items-center space-x-3">
+                <button onclick="openAdminPrompt()" class="text-xs text-zinc-300 hover:text-blue-400 border border-zinc-700 hover:border-blue-500/50 px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 bg-dark-800">
+                    <i class="fa-solid fa-lock text-blue-400"></i> Admin
+                </button>
+                <a href="#reserva" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 transition-all text-sm">
+                    <i class="fa-regular fa-calendar-days mr-2"></i> Turno Online
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-zinc-200 hover:text-blue-400 focus:outline-none p-3 rounded-xl bg-dark-800 border border-zinc-700">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-800/98 border-b border-zinc-700 px-6 pt-4 pb-8 space-y-4 shadow-2xl backdrop-blur-lg">
+            <a href="#inicio" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-house mr-3 text-blue-400"></i> Inicio</a>
+            <a href="#sobre-mi" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-award mr-3 text-blue-400"></i> Certificado & Historia</a>
+            <a href="#servicios" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-scissors mr-3 text-blue-400"></i> Servicios & Precios</a>
+            <a href="#reserva" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-regular fa-calendar-check mr-3 text-blue-400"></i> Reservar Turno</a>
+            <a href="#galeria" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-images mr-3 text-blue-400"></i> Galería de Trabajos</a>
+            <a href="#contacto" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-location-dot mr-3 text-blue-400"></i> Ubicación & Contacto</a>
+            <div class="pt-4 flex flex-col gap-3">
+                <a href="#reserva" class="w-full text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg mobile-link text-base">Agendar Turno Ahora</a>
+                <button onclick="openAdminPrompt()" class="w-full text-center border border-zinc-700 bg-dark-900 text-zinc-300 py-3 rounded-xl text-sm font-medium"><i class="fa-solid fa-user-shield mr-2 text-blue-400"></i> Panel Administrador</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="inicio" class="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-dark-900">
+        <!-- Marca de agua de fondo -->
+        <div class="watermark-bg">Lucas Robledo Barbershop</div>
+
+        <!-- Background Fusion Effect -->
+        <div class="absolute inset-0 opacity-15 mix-blend-luminosity bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1600&auto=format&fit=crop');"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/90 to-dark-900/60"></div>
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center z-10">
+            <!-- Badge con movimiento/animación -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-dark-800 border border-blue-500/40 text-blue-400 text-xs sm:text-sm font-medium mb-6 shadow-md backdrop-blur-sm animate-pulse-slow">
+                <i class="fa-solid fa-certificate"></i> Certificado Profesional avalado por Lionel Ferro • Paso de los Libres
+            </div>
+            
+            <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
+                Lucas Robledo <br>
+                <span class="blue-gradient">Barbershop</span>
+            </h1>
+            
+            <p class="max-w-2xl mx-auto text-base sm:text-xl text-zinc-300 mb-10 font-light leading-relaxed px-2">
+                Estilo, precisión y degradados impecables. Formación profesional y la mejor atención en <strong class="text-white font-medium">Paso de los Libres, Corrientes</strong>.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
+                <a href="#reserva" class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-xl shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 text-base flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-calendar-check text-lg"></i> Reservar Mi Turno Online
+                </a>
+                <a href="#servicios" class="w-full sm:w-auto bg-dark-800 hover:bg-dark-700 text-zinc-200 font-semibold px-8 py-4 rounded-2xl border border-zinc-700 hover:border-blue-500/50 transition-all text-base backdrop-blur-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-tags text-blue-400"></i> Ver Precios y Cortes
+                </a>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="mt-16 grid grid-cols-3 gap-4 max-w-2xl mx-auto border-t border-zinc-800/80 pt-8">
+                <div class="text-center">
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-blue-400">100%</span>
+                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Compromiso y Detalle</span>
+                </div>
+                <div class="text-center border-x border-zinc-800">
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-zinc-100">Pro</span>
+                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Técnicas Modernas</span>
+                </div>
+                <div class="text-center">
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-blue-400">Online</span>
+                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Turnos Rápidos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CERTIFICADO & HISTORIA SECTION -->
+    <section id="sobre-mi" class="py-20 bg-dark-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left: Certificate Showcase -->
+                <div class="lg:col-span-6">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-700 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                        <div class="relative bg-dark-900 border border-blue-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                            
+                            <div class="mb-6 rounded-2xl overflow-hidden border border-zinc-800 shadow-inner bg-dark-800 aspect-[4/3] flex items-center justify-center">
+                                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="Certificado de Reconocimiento Lucas Robledo" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            </div>
+
+                            <div class="text-center pb-4 border-b border-zinc-800">
+                                <span class="text-[11px] uppercase tracking-widest text-blue-400 font-bold">Certificado de Reconocimiento</span>
+                                <h3 class="font-serif text-xl sm:text-2xl font-bold text-zinc-100 mt-1">LUCAS NAHUEL ROBLEDO</h3>
+                                <p class="text-xs text-zinc-400 mt-1">Capacitación recibida por <span class="text-zinc-200 font-semibold">Lionel Ferro</span></p>
+                            </div>
+
+                            <div class="py-4 text-center">
+                                <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed font-light italic">
+                                    "Por haber completado satisfactoriamente el curso sobre barbería y corte básico en 10 lecciones de clases recibidas."
+                                </p>
+                            </div>
+
+                            <div class="pt-4 border-t border-zinc-800 flex justify-between items-center text-xs text-zinc-400">
+                                <div class="text-center flex-1">
+                                    <span class="block font-semibold text-zinc-200">Lionel Ferro</span>
+                                    <span class="text-[10px]">Capacitador</span>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-xs">
+                                    <i class="fa-solid fa-award"></i>
+                                </div>
+                                <div class="text-center flex-1">
+                                    <span class="block font-semibold text-zinc-200">Lucas Robledo</span>
+                                    <span class="text-[10px]">Estudiante / Barbero</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: About description -->
+                <div class="lg:col-span-6 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-semibold uppercase tracking-wider">
+                        Pasión & Profesionalismo
+                    </div>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-zinc-100 leading-tight">
+                        El arte de cortar bien, perfeccionado paso a paso.
+                    </h2>
+                    <p class="text-zinc-300 leading-relaxed font-light text-base sm:text-lg">
+                        Hola, soy <strong class="text-blue-400 font-semibold">Lucas Robledo</strong>. Me dedico a brindar una experiencia de barbería moderna y de alta calidad en Paso de los Libres. Cada corte está pensado para resaltar tu estilo personal con prolijidad y técnica.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed font-light text-sm">
+                        Utilizo herramientas profesionales, maquinarias de precisión y técnicas avanzadas en degradados y perfilados. Mi objetivo es que cada visita a la barbería sea un momento de renovación total.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="flex items-start space-x-3 bg-dark-900 p-4 rounded-2xl border border-zinc-800">
+                            <div class="text-blue-400 text-xl mt-0.5"><i class="fa-solid fa-scissors"></i></div>
+                            <div>
+                                <h4 class="font-semibold text-zinc-200 text-sm">Degradados Limpios</h4>
+                                <p class="text-xs text-zinc-400 mt-0.5">Fade y taper adaptados a tu estructura.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 bg-dark-900 p-4 rounded-2xl border border-zinc-800">
+                            <div class="text-blue-400 text-xl mt-0.5"><i class="fa-solid fa-face-smile"></i></div>
+                            <div>
+                                <h4 class="font-semibold text-zinc-200 text-sm">Atención Dedicada</h4>
+                                <p class="text-xs text-zinc-400 mt-0.5">Asesoramiento de imagen y estilo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <a href="#reserva" class="inline-flex items-center gap-2 text-blue-400 font-semibold hover:text-blue-300 transition-colors text-base">
+                            Quiero reservar un turno ahora <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES & PRICING SECTION -->
+    <section id="servicios" class="py-20 bg-dark-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Tarifas Transparentes</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mt-2 mb-4">Servicios & Precios</h2>
+                <p class="text-zinc-400 font-light text-sm sm:text-base">Selecciona tu servicio favorito y agenda tu espacio en segundos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Service 1: Corte Clásico -->
+                <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-6 border border-blue-500/20 shadow-inner">
+                            <i class="fa-solid fa-scissors"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Corte Clásico</h3>
+                        <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Corte tradicional a tijera o máquina, acabado prolijo y terminación.</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
+                            <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 30 min</span>
+                            <span class="font-serif text-2xl font-bold text-blue-400">$8.000</span>
+                        </div>
+                        <button onclick="selectServiceAndScroll('Corte Clásico', 8000)" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
+                            Reservar Este
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service 2: Perfilado y Barba -->
+                <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-6 border border-blue-500/20 shadow-inner">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Perfilado y Barba</h3>
+                        <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Definición de contornos, navaja y productos hidratantes profesionales.</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
+                            <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 25 min</span>
+                            <span class="font-serif text-2xl font-bold text-blue-400">$5.000</span>
+                        </div>
+                        <button onclick="selectServiceAndScroll('Perfilado y Barba', 5000)" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
+                            Reservar Este
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service 3: Combo Completo (Featured) -->
+                <div class="bg-gradient-to-b from-dark-800 to-dark-700 rounded-3xl p-6 sm:p-7 border-2 border-blue-500 shadow-xl shadow-blue-500/15 flex flex-col justify-between group relative overflow-hidden transform lg:-translate-y-2">
+                    <div class="absolute top-3 right-3 bg-blue-600 text-white font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow">
+                        Más Popular
+                    </div>
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-xl mb-6 shadow-md">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Combo Completo</h3>
+                        <p class="text-xs text-zinc-300 mb-6 leading-relaxed">Corte de cabello completo + Perfilado de barba con toallas calientes.</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-600">
+                            <span class="text-xs text-zinc-300"><i class="fa-regular fa-clock mr-1"></i> 50 min</span>
+                            <span class="font-serif text-2xl font-bold text-blue-400">$12.000</span>
+                        </div>
+                        <button onclick="selectServiceAndScroll('Combo Completo', 12000)" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3 rounded-2xl transition-all text-sm shadow-lg">
+                            Reservar Combo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service 4: Styling y Cejas -->
+                <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-6 border border-blue-500/20 shadow-inner">
+                            <i class="fa-solid fa-face-smile"></i>
+                        </div>
+                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Styling y Cejas</h3>
+                        <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Peinado especializado con productos premium y prolijado de cejas.</p>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
+                            <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 20 min</span>
+                            <span class="font-serif text-2xl font-bold text-blue-400">$3.000</span>
+                        </div>
+                        <button onclick="selectServiceAndScroll('Styling y Cejas', 3000)" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
+                            Reservar Este
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ONLINE BOOKING SYSTEM SECTION -->
+    <section id="reserva" class="py-20 bg-dark-800 relative">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Reserva Rápida</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3">Agenda tu Turno Online</h2>
+                <p class="text-zinc-400 font-light text-sm">Elige tu servicio, fecha y hora. ¡Te esperamos en la barbería!</p>
+            </div>
+
+            <div class="bg-dark-900 border border-zinc-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
+                
+                <!-- Booking Form -->
+                <form id="booking-form" onsubmit="handleBooking(event)" class="space-y-6">
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-300 mb-2">1. Selecciona el Servicio</label>
+                        <select id="service-select" required onchange="updateServicePrice()" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
+                            <option value="Corte Clásico" data-price="8000">Corte Clásico ($8.000 - 30 min)</option>
+                            <option value="Perfilado y Barba" data-price="5000">Perfilado y Barba ($5.000 - 25 min)</option>
+                            <option value="Combo Completo" data-price="12000" selected>Combo Completo (Corte + Barba) ($12.000 - 50 min)</option>
+                            <option value="Styling y Cejas" data-price="3000">Styling y Cejas ($3.000 - 20 min)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-zinc-300 mb-2">2. Fecha del Turno</label>
+                            <input type="date" id="booking-date" required class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-zinc-300 mb-2">3. Horario (15:00 a 20:00)</label>
+                            <select id="booking-time" required class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
+                                <option value="">Selecciona hora...</option>
+                                <option value="15:00 hs">15:00 hs</option>
+                                <option value="16:00 hs">16:00 hs</option>
+                                <option value="17:00 hs">17:00 hs</option>
+                                <option value="18:00 hs">18:00 hs</option>
+                                <option value="19:00 hs">19:00 hs</option>
+                                <option value="20:00 hs">20:00 hs</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-2">
+                        <div>
+                            <label class="block text-sm font-semibold text-zinc-300 mb-2">Tu Nombre y Apellido</label>
+                            <input type="text" id="client-name" required placeholder="Ej: Juan Pérez" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-zinc-300 mb-2">Tu Teléfono / WhatsApp</label>
+                            <input type="tel" id="client-phone" required placeholder="Ej: 3772449950" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs text-zinc-400 block">Total a Pagar:</span>
+                            <span id="price-display" class="font-serif text-3xl font-bold text-blue-400">$12.000</span>
+                        </div>
+                        <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-xl shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 text-base flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-check-circle text-lg"></i> Confirmar Mi Turno
+                        </button>
+                    </div>
+
+                </form>
+
+                <!-- Success State -->
+                <div id="booking-success" class="hidden text-center py-10 space-y-6">
+                    <div class="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center text-blue-400 text-3xl mx-auto animate-bounce shadow-lg">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-zinc-100">¡Turno Agendado con Éxito!</h3>
+                    <p class="text-zinc-300 max-w-md mx-auto text-sm sm:text-base leading-relaxed px-2" id="success-details">
+                        Tu turno ha sido registrado en el sistema.
+                    </p>
+                    <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="resetBookingForm()" class="bg-dark-800 hover:bg-dark-700 text-zinc-200 font-semibold px-6 py-3.5 rounded-2xl border border-zinc-700 text-sm">
+                            Reservar Otro Turno
+                        </button>
+                        <a id="whatsapp-confirm-btn" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Turno a Lucas por WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section id="galeria" class="py-20 bg-dark-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Trabajos Reales</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mt-2 mb-4">Galería de Cortes</h2>
+                <p class="text-zinc-400 font-light text-sm sm:text-base">Degradados limpios, prolijidad y estilo en cada sesión de Lucas Robledo.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Image 1: Certificado Oficial -->
+                <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="Certificado Oficial" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
+                        <div>
+                            <span class="text-xs text-blue-400 uppercase tracking-widest font-semibold">Certificación Oficial</span>
+                            <h4 class="font-serif text-lg font-bold text-zinc-100">Avalado por Lionel Ferro</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image 2: Fade / Degradado -->
+                <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=800&auto=format&fit=crop" alt="Corte Moderno y Fade" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
+                        <div>
+                            <span class="text-xs text-blue-400 uppercase tracking-widest font-semibold">Fade / Degradado</span>
+                            <h4 class="font-serif text-lg font-bold text-zinc-100">Corte Moderno y Precisión</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image 3: Perfilado de Cejas y Barba -->
+                <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=80&w=800&auto=format&fit=crop" alt="Perfilado y Cejas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
+                        <div>
+                            <span class="text-xs text-blue-400 uppercase tracking-widest font-semibold">Barba & Cejas</span>
+                            <h4 class="font-serif text-lg font-bold text-zinc-100">Perfilado y Styling Profesional</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT & LOCATION SECTION -->
+    <section id="contacto" class="py-20 bg-dark-800 border-t border-zinc-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div class="space-y-6">
+                    <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Ubicación & Contacto</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-zinc-100">Visita Lucas Robledo Barbershop</h2>
+                    <p class="text-zinc-300 font-light leading-relaxed text-sm sm:text-base">
+                        Vení a vivir una experiencia de barbería de primer nivel en <strong class="text-white">Paso de los Libres, Corrientes</strong>. Excelente ambiente, atención personalizada y resultados garantizados.
+                    </p>
+
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-inner">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-zinc-200">Dirección</h4>
+                                <p class="text-sm text-zinc-400">Paso de los Libres, Corrientes, Argentina</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-inner">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-zinc-200">Horarios de Atención</h4>
+                                <p class="text-sm text-zinc-400">Lunes a Sábado: 15:00 hs - 20:00 hs</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-inner">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-zinc-200">WhatsApp Oficial</h4>
+                                <p class="text-sm text-zinc-400">+54 9 3772 44-9950</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex flex-col sm:flex-row items-center gap-4">
+                        <a href="https://wa.me/5493772449950?text=Hola%20Lucas,%20quiero%20hacer%20una%20consulta%20sobre%20tus%20turnos" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Chatear por WhatsApp
+                        </a>
+                        <a href="#reserva" class="w-full sm:w-auto bg-dark-700 hover:bg-dark-600 text-zinc-200 font-semibold px-6 py-3.5 rounded-2xl text-sm transition-all text-center border border-zinc-600">
+                            Agendar Turno Online
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Map Card -->
+                <div class="bg-dark-900 border border-zinc-800 rounded-3xl p-6 h-96 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                    <div class="absolute inset-0 opacity-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/50 to-transparent"></div>
+                    
+                    <div class="relative z-10 flex justify-between items-start">
+                        <span class="bg-dark-800/90 border border-zinc-700 text-blue-400 text-xs font-semibold px-3.5 py-2 rounded-xl backdrop-blur-md shadow">
+                            <i class="fa-solid fa-map-pin mr-1.5"></i> Paso de los Libres, Corrientes
+                        </span>
+                    </div>
+
+                    <div class="relative z-10 bg-dark-900/90 border border-zinc-800 p-5 rounded-2xl backdrop-blur-md shadow-lg">
+                        <h4 class="font-serif font-bold text-zinc-100 text-lg">Lucas Robledo Barbershop</h4>
+                        <p class="text-xs text-zinc-400 mt-1">Atención preferencial con reserva online y turnos programados.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark-900 border-t border-zinc-800 py-12 text-center text-xs text-zinc-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            <div class="flex items-center justify-center space-x-2">
+                <div class="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow">LR</div>
+                <span class="font-serif text-sm font-bold text-zinc-300">LUCAS ROBLEDO BARBERSHOP</span>
+            </div>
+            <p>Paso de los Libres, Corrientes • Certificación Profesional por Lionel Ferro © 2026.</p>
+        </div>
+    </footer>
+
+    <!-- PIN MODAL FOR ADMIN ACCESS (Sofisticado y sin revelar el PIN) -->
+    <div id="pin-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+            <div class="flex items-center justify-between pb-4 border-b border-zinc-700 mb-6">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-lock text-blue-400 text-xl"></i>
+                    <h3 class="font-serif text-xl font-bold text-zinc-100">Acceso Restringido</h3>
+                </div>
+                <button onclick="closePinModal()" class="text-zinc-400 hover:text-zinc-100 text-xl p-2 rounded-xl bg-dark-900">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="verifyPin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-zinc-300 mb-2">Ingrese el PIN de Administrador</label>
+                    <input type="password" id="pin-input" required placeholder="••••••••" class="w-full bg-dark-900 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-center text-lg tracking-widest">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closePinModal()" class="bg-dark-900 hover:bg-dark-700 text-zinc-300 font-semibold px-5 py-2.5 rounded-xl border border-zinc-700 text-sm">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
+                        Ingresar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN MODAL (PIN: 30102003) -->
+    <div id="admin-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-4 border-b border-zinc-700 mb-6">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-user-shield text-blue-400 text-xl"></i>
+                    <h3 class="font-serif text-xl sm:text-2xl font-bold text-zinc-100">Panel de Administración</h3>
+                </div>
+                <button onclick="closeAdminModal()" class="text-zinc-400 hover:text-zinc-100 text-xl p-2 rounded-xl bg-dark-900">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div class="flex items-center justify-between bg-dark-900 p-4 rounded-2xl border border-zinc-700/80">
+                    <div>
+                        <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Estado del Sistema</span>
+                        <p class="text-sm text-zinc-300">Turnos agendados por clientes</p>
+                    </div>
+                    <span id="turnos-count" class="bg-blue-500/20 text-blue-400 font-bold px-3.5 py-1.5 rounded-xl text-sm border border-blue-500/30">0 turnos</span>
+                </div>
+
+                <div id="admin-turnos-list" class="space-y-3">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-zinc-700 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <button onclick="clearAllTurnos()" class="w-full sm:w-auto text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-4 py-2.5 rounded-xl transition-colors bg-red-500/10">
+                    Borrar Todos los Turnos
+                </button>
+                <button onclick="closeAdminModal()" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
+                    Cerrar Panel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Set default date to today for booking
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('booking-date').min = today;
+        document.getElementById('booking-date').value = today;
+
+        // Update price when service select changes
+        function updateServicePrice() {
+            const select = document.getElementById('service-select');
+            const selectedOption = select.options[select.selectedIndex];
+            const price = selectedOption.getAttribute('data-price');
+            document.getElementById('price-display').innerText = '$' + Number(price).toLocaleString('es-AR');
+        }
+
+        // Select service and scroll to booking form
+        function selectServiceAndScroll(serviceName, price) {
+            const select = document.getElementById('service-select');
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value === serviceName) {
+                    select.selectedIndex = i;
+                    break;
+                }
+            }
+            updateServicePrice();
+            document.getElementById('reserva').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Handle Booking Form Submission
+        function handleBooking(event) {
+            event.preventDefault();
+
+            const service = document.getElementById('service-select').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+            const name = document.getElementById('client-name').value;
+            const phone = document.getElementById('client-phone').value;
+
+            const turno = {
+                id: Date.now(),
+                service,
+                date,
+                time,
+                name,
+                phone,
+                createdAt: new Date().toLocaleString()
+            };
+
+            // Save to localStorage
+            let turnos = JSON.parse(localStorage.getItem('lucas_robledo_turnos')) || [];
+            turnos.push(turno);
+            localStorage.setItem('lucas_robledo_turnos', JSON.stringify(turnos));
+
+            // Update success details text
+            document.getElementById('success-details').innerHTML = `¡Gracias <strong>${name}</strong>! Tu turno para <strong>${service}</strong> el día <strong>${date}</strong> a las <strong>${time} hs</strong> ha sido registrado correctamente.`;
+
+            // Setup WhatsApp confirmation button link
+            const waText = encodeURIComponent(`Hola Lucas! Reservé un turno online para ${service} el día ${date} a las ${time} hs. Mi nombre es ${name} (${phone}).`);
+            document.getElementById('whatsapp-confirm-btn').href = `https://wa.me/5493772449950?text=${waText}`;
+
+            // Toggle view
+            document.getElementById('booking-form').classList.add('hidden');
+            document.getElementById('booking-success').classList.remove('hidden');
+        }
+
+        function resetBookingForm() {
+            document.getElementById('booking-form').reset();
+            document.getElementById('booking-date').value = today;
+            updateServicePrice();
+            document.getElementById('booking-form').classList.remove('hidden');
+            document.getElementById('booking-success').classList.add('hidden');
+        }
+
+        // Admin PIN Protection (PIN: 30102003)
+        const ADMIN_PIN = "30102003";
+
+        function openAdminPrompt() {
+            document.getElementById('pin-input').value = '';
+            document.getElementById('pin-modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('pin-input').focus(), 100);
+        }
+
+        function closePinModal() {
+            document.getElementById('pin-modal').classList.add('hidden');
+        }
+
+        function verifyPin(event) {
+            event.preventDefault();
+            const enteredPin = document.getElementById('pin-input').value;
+            if (enteredPin === ADMIN_PIN) {
+                closePinModal();
+                openAdminModal();
+            } else {
+                alert("PIN incorrecto. Acceso denegado.");
+                document.getElementById('pin-input').value = '';
+                document.getElementById('pin-input').focus();
+            }
+        }
+
+        function openAdminModal() {
+            renderAdminTurnos();
+            document.getElementById('admin-modal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function renderAdminTurnos() {
+            const container = document.getElementById('admin-turnos-list');
+            const turnos = JSON.parse(localStorage.getItem('lucas_robledo_turnos')) || [];
+            document.getElementById('turnos-count').innerText = turnos.length + (turnos.length === 1 ? ' turno' : ' turnos');
+
+            if (turnos.length === 0) {
+                container.innerHTML = `<p class="text-zinc-500 text-sm text-center py-8">No hay turnos agendados todavía.</p>`;
+                return;
+            }
+
+            container.innerHTML = turnos.map(t => `
+                <div class="bg-dark-900 border border-zinc-700/80 p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-bold text-zinc-100 text-sm">${t.name}</span>
+                            <span class="bg-blue-500/10 text-blue-400 text-[10px] px-2 py-0.5 rounded border border-blue-500/20">${t.service}</span>
+                        </div>
+                        <p class="text-xs text-zinc-300 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${t.date} a las <span class="text-blue-400 font-semibold">${t.time} hs</span></p>
+                        <p class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Teléfono: ${t.phone}</p>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-800">
+                        <a href="https://wa.me/549${t.phone.replace(/\D/g,'')}?text=Hola%20${encodeURIComponent(t.name)},%20te%20escribo%20de%20Lucas%20Robledo%20Barbershop%20por%20tu%20turno%20el%20${t.date}%20a%20las%20${t.time}%20hs." target="_blank" class="text-emerald-400 hover:text-emerald-300 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl border border-emerald-500/20 transition-colors flex items-center gap-1.5 font-medium">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Contactar
+                        </a>
+                        <button onclick="deleteTurno(${t.id})" class="text-red-400 hover:text-red-300 text-xs bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl border border-red-500/20 transition-colors font-medium">
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteTurno(id) {
+            let turnos = JSON.parse(localStorage.getItem('lucas_robledo_turnos')) || [];
+            turnos = turnos.filter(t => t.id !== id);
+            localStorage.setItem('lucas_robledo_turnos', JSON.stringify(turnos));
+            renderAdminTurnos();
+        }
+
+        function clearAllTurnos() {
+            if (confirm('¿Estás seguro de borrar todos los turnos guardados?')) {
+                localStorage.removeItem('lucas_robledo_turnos');
+                renderAdminTurnos();
+            }
+        }
+    </script>
+</body>
+</html>
