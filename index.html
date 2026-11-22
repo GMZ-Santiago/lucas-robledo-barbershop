@@ -2,8 +2,15 @@
 <html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Robledo | Barbershop en Paso de los Libres</title>
+    <meta name="description" content="Barbería en Paso de los Libres, Corrientes. Cortes, degradados, perfilado de barba y cejas. Reservá tu turno online con Lucas Robledo.">
+    <meta name="theme-color" content="#06090f">
+    <meta property="og:title" content="Lucas Robledo Barbershop · Paso de los Libres">
+    <meta property="og:description" content="Cortes, degradados y barba. Reservá tu turno online.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%232563eb'/><text x='50' y='64' font-size='42' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'>LR</text></svg>">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,19 +18,8 @@
             theme: {
                 extend: {
                     colors: {
-                        blue: {
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            DEFAULT: '#3b82f6'
-                        },
-                        dark: {
-                            900: '#06090f',
-                            800: '#0f172a',
-                            700: '#1e293b',
-                            600: '#334155',
-                        }
+                        blue: { 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', DEFAULT: '#3b82f6' },
+                        dark: { 900: '#06090f', 800: '#0f172a', 700: '#1e293b', 600: '#334155' }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -33,934 +29,1253 @@
             }
         }
     </script>
-    <!-- Google Fonts Inter & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase App SDK & Firestore Compat -->
+
+    <!-- Firebase (App + Firestore + Auth) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <style>
         body { font-family: 'Inter', sans-serif; }
         .blue-gradient {
             background: linear-gradient(135deg, #93c5fd 0%, #3b82f6 50%, #1d4ed8 100%);
-            -webkit-background-clip: text;
+            -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 0.85; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.02); }
-        }
-        .animate-pulse-slow {
-            animation: pulse-slow 3.5s infinite ease-in-out;
-        }
+        @keyframes pulse-slow { 0%,100% { opacity: .85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.02); } }
+        .animate-pulse-slow { animation: pulse-slow 3.5s infinite ease-in-out; }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        .animate-fade-in { animation: fade-in .25s ease-out; }
         .watermark-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) rotate(-12deg);
-            font-size: 7vw;
-            font-weight: 900;
-            color: rgba(59, 130, 246, 0.025);
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 0;
-            user-select: none;
-            text-transform: uppercase;
+            font-size: 7vw; font-weight: 900; color: rgba(59,130,246,.025);
+            white-space: nowrap; pointer-events: none; z-index: 0; user-select: none; text-transform: uppercase;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        .no-scrollbar { scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #06090f; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.8); cursor: pointer; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+        }
     </style>
 </head>
 <body class="bg-dark-900 text-zinc-100 antialiased selection:bg-blue-500 selection:text-white">
 
-    <!-- HEADER / NAVBAR -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-dark-900/95 backdrop-blur-md border-b border-zinc-800 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between py-3">
+    <!-- HEADER -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-40 bg-dark-900/95 backdrop-blur-md border-b border-zinc-800 transition-shadow duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#inicio" class="flex items-center space-x-3 group">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
-                    LR
-                </div>
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">LR</div>
                 <div>
                     <span class="block font-serif text-base sm:text-lg font-bold tracking-wider text-zinc-100">LUCAS ROBLEDO</span>
                     <span class="block text-[10px] sm:text-xs uppercase tracking-widest text-blue-400 font-semibold">Barbershop • Libres</span>
                 </div>
             </a>
 
-            <!-- Desktop Nav -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                <a href="#inicio" class="text-zinc-300 hover:text-blue-400 transition-colors">Inicio</a>
-                <a href="#sobre-mi" class="text-zinc-300 hover:text-blue-400 transition-colors">Certificado & Historia</a>
-                <a href="#servicios" class="text-zinc-300 hover:text-blue-400 transition-colors">Servicios & Precios</a>
-                <a href="#reserva" class="text-zinc-300 hover:text-blue-400 transition-colors">Reservar Turno</a>
-                <a href="#galeria" class="text-zinc-300 hover:text-blue-400 transition-colors">Galería</a>
+            <nav class="hidden md:flex items-center space-x-7 text-sm font-medium">
+                <a href="#sobre-mi" class="text-zinc-300 hover:text-blue-400 transition-colors">Sobre mí</a>
+                <a href="#servicios" class="text-zinc-300 hover:text-blue-400 transition-colors">Precios</a>
+                <a href="#galeria" class="text-zinc-300 hover:text-blue-400 transition-colors">Trabajos</a>
                 <a href="#contacto" class="text-zinc-300 hover:text-blue-400 transition-colors">Ubicación</a>
             </nav>
 
-            <div class="hidden md:flex items-center space-x-3">
-                <button onclick="openAdminPrompt()" class="text-xs text-zinc-300 hover:text-blue-400 border border-zinc-700 hover:border-blue-500/50 px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 bg-dark-800">
-                    <i class="fa-solid fa-lock text-blue-400"></i> Admin
-                </button>
-                <a href="#reserva" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 transition-all text-sm">
-                    <i class="fa-regular fa-calendar-days mr-2"></i> Turno Online
-                </a>
-            </div>
+            <a href="#reserva" class="hidden md:inline-flex items-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-blue-500/25 transition-all text-sm">
+                <i class="fa-regular fa-calendar-days mr-2"></i> Reservar turno
+            </a>
 
-            <!-- Mobile Menu Button -->
-            <button id="menu-btn" class="md:hidden text-zinc-200 hover:text-blue-400 focus:outline-none p-3 rounded-xl bg-dark-800 border border-zinc-700">
+            <button id="menu-btn" aria-label="Abrir menú" aria-expanded="false" class="md:hidden text-zinc-200 hover:text-blue-400 p-3 rounded-xl bg-dark-800 border border-zinc-700">
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
         </div>
 
-        <!-- Mobile Menu Drawer -->
-        <div id="mobile-menu" class="hidden md:hidden bg-dark-800/98 border-b border-zinc-700 px-6 pt-4 pb-8 space-y-4 shadow-2xl backdrop-blur-lg">
-            <a href="#inicio" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-house mr-3 text-blue-400"></i> Inicio</a>
-            <a href="#sobre-mi" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-award mr-3 text-blue-400"></i> Certificado & Historia</a>
-            <a href="#servicios" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-scissors mr-3 text-blue-400"></i> Servicios & Precios</a>
-            <a href="#reserva" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-regular fa-calendar-check mr-3 text-blue-400"></i> Reservar Turno</a>
-            <a href="#galeria" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-images mr-3 text-blue-400"></i> Galería de Trabajos</a>
-            <a href="#contacto" class="block py-3 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-location-dot mr-3 text-blue-400"></i> Ubicación & Contacto</a>
-            <div class="pt-4 flex flex-col gap-3">
-                <a href="#reserva" class="w-full text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg mobile-link text-base">Agendar Turno Ahora</a>
-                <button onclick="openAdminPrompt()" class="w-full text-center border border-zinc-700 bg-dark-900 text-zinc-300 py-3 rounded-xl text-sm font-medium"><i class="fa-solid fa-user-shield mr-2 text-blue-400"></i> Panel Administrador</button>
-            </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-800 border-b border-zinc-700 px-6 pt-2 pb-6 shadow-2xl">
+            <a href="#sobre-mi" class="block py-3.5 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-award mr-3 text-blue-400 w-5"></i> Sobre mí</a>
+            <a href="#servicios" class="block py-3.5 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-scissors mr-3 text-blue-400 w-5"></i> Servicios y precios</a>
+            <a href="#galeria" class="block py-3.5 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-images mr-3 text-blue-400 w-5"></i> Trabajos</a>
+            <a href="#contacto" class="block py-3.5 text-base text-zinc-200 hover:text-blue-400 font-medium border-b border-zinc-700/50 mobile-link"><i class="fa-solid fa-location-dot mr-3 text-blue-400 w-5"></i> Ubicación y contacto</a>
+            <a href="#reserva" class="mt-5 block w-full text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg mobile-link">Reservar turno ahora</a>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
+    <!-- HERO -->
     <section id="inicio" class="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 overflow-hidden bg-dark-900">
         <div class="watermark-bg">Lucas Robledo Barbershop</div>
-
-        <div class="absolute inset-0 opacity-15 mix-blend-luminosity bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1600&auto=format&fit=crop');"></div>
+        <div class="absolute inset-0 opacity-15 mix-blend-luminosity bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=1600&auto=format&fit=crop');"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/90 to-dark-900/60"></div>
         <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-dark-800 border border-blue-500/40 text-blue-400 text-xs sm:text-sm font-medium mb-6 shadow-md backdrop-blur-sm animate-pulse-slow">
-                <i class="fa-solid fa-certificate"></i> Certificado Profesional avalado por Lionel Ferro • Paso de los Libres
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-dark-800 border border-blue-500/40 text-blue-400 text-xs sm:text-sm font-medium mb-6 shadow-md animate-pulse-slow">
+                <i class="fa-solid fa-certificate"></i> Formado por Lionel Ferro • Paso de los Libres
             </div>
-            
             <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
-                Lucas Robledo <br>
-                <span class="blue-gradient">Barbershop</span>
+                Lucas Robledo <br><span class="blue-gradient">Barbershop</span>
             </h1>
-            
             <p class="max-w-2xl mx-auto text-base sm:text-xl text-zinc-300 mb-10 font-light leading-relaxed px-2">
-                Estilo, precisión y degradados impecables. Formación profesional y la mejor atención en <strong class="text-white font-medium">Paso de los Libres, Corrientes</strong>.
+                Estilo, precisión y degradados prolijos. La mejor atención en <strong class="text-white font-medium">Paso de los Libres, Corrientes</strong>.
             </p>
-
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 px-4">
-                <a href="#reserva" class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-xl shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 text-base flex items-center justify-center gap-2">
-                    <i class="fa-regular fa-calendar-check text-lg"></i> Reservar Mi Turno Online
+                <a href="#reserva" class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-xl shadow-blue-500/25 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-calendar-check text-lg"></i> Reservar mi turno
                 </a>
-                <a href="#servicios" class="w-full sm:w-auto bg-dark-800 hover:bg-dark-700 text-zinc-200 font-semibold px-8 py-4 rounded-2xl border border-zinc-700 hover:border-blue-500/50 transition-all text-base backdrop-blur-sm flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-tags text-blue-400"></i> Ver Precios y Cortes
+                <a href="#galeria" class="w-full sm:w-auto bg-dark-800 hover:bg-dark-700 text-zinc-200 font-semibold px-8 py-4 rounded-2xl border border-zinc-700 hover:border-blue-500/50 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-images text-blue-400"></i> Ver trabajos
                 </a>
             </div>
-
             <div class="mt-16 grid grid-cols-3 gap-4 max-w-2xl mx-auto border-t border-zinc-800/80 pt-8">
                 <div class="text-center">
-                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-blue-400">100%</span>
-                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Compromiso y Detalle</span>
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-blue-400">Lun–Sáb</span>
+                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">15 a 20 hs</span>
                 </div>
                 <div class="text-center border-x border-zinc-800">
-                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-zinc-100">Pro</span>
-                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Técnicas Modernas</span>
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-zinc-100">Fade</span>
+                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Técnicas modernas</span>
                 </div>
                 <div class="text-center">
                     <span class="block font-serif text-2xl sm:text-3xl font-bold text-blue-400">Online</span>
-                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Turnos Rápidos</span>
+                    <span class="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider">Turnos en 1 minuto</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CERTIFICADO & HISTORIA SECTION -->
-    <section id="sobre-mi" class="py-20 bg-dark-800 relative">
+    <!-- SOBRE MÍ / CERTIFICADO -->
+    <section id="sobre-mi" class="py-20 bg-dark-800 relative scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                
                 <div class="lg:col-span-6">
                     <div class="relative group">
                         <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-700 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
                         <div class="relative bg-dark-900 border border-blue-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl">
-                            
-                            <div class="mb-6 rounded-2xl overflow-hidden border border-zinc-800 shadow-inner bg-dark-800 aspect-[4/3] flex items-center justify-center">
-                                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="Certificado de Reconocimiento Lucas Robledo" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                            <div class="mb-6 rounded-2xl overflow-hidden border border-zinc-800 bg-dark-800 aspect-[4/3]">
+                                <img id="cert-img" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="Certificado de Lucas Robledo" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                             </div>
-
                             <div class="text-center pb-4 border-b border-zinc-800">
                                 <span class="text-[11px] uppercase tracking-widest text-blue-400 font-bold">Certificado de Reconocimiento</span>
                                 <h3 class="font-serif text-xl sm:text-2xl font-bold text-zinc-100 mt-1">LUCAS NAHUEL ROBLEDO</h3>
-                                <p class="text-xs text-zinc-400 mt-1">Capacitación recibida por <span class="text-zinc-200 font-semibold">Lionel Ferro</span></p>
+                                <p class="text-xs text-zinc-400 mt-1">Capacitación dictada por <span class="text-zinc-200 font-semibold">Lionel Ferro</span></p>
                             </div>
-
                             <div class="py-4 text-center">
-                                <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed font-light italic">
-                                    "Por haber completado satisfactoriamente el curso sobre barbería y corte básico en 10 lecciones de clases recibidas."
-                                </p>
+                                <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed font-light italic">"Por haber completado satisfactoriamente el curso sobre barbería y corte básico en 10 lecciones de clases recibidas."</p>
                             </div>
-
                             <div class="pt-4 border-t border-zinc-800 flex justify-between items-center text-xs text-zinc-400">
-                                <div class="text-center flex-1">
-                                    <span class="block font-semibold text-zinc-200">Lionel Ferro</span>
-                                    <span class="text-[10px]">Capacitador</span>
-                                </div>
-                                <div class="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-xs">
-                                    <i class="fa-solid fa-award"></i>
-                                </div>
-                                <div class="text-center flex-1">
-                                    <span class="block font-semibold text-zinc-200">Lucas Robledo</span>
-                                    <span class="text-[10px]">Estudiante / Barbero</span>
-                                </div>
+                                <div class="text-center flex-1"><span class="block font-semibold text-zinc-200">Lionel Ferro</span><span class="text-[10px]">Capacitador</span></div>
+                                <div class="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400"><i class="fa-solid fa-award"></i></div>
+                                <div class="text-center flex-1"><span class="block font-semibold text-zinc-200">Lucas Robledo</span><span class="text-[10px]">Barbero</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-6 space-y-6">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-semibold uppercase tracking-wider">
-                        Pasión & Profesionalismo
-                    </div>
-                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-zinc-100 leading-tight">
-                        El arte de cortar bien, perfeccionado paso a paso.
-                    </h2>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-500/10 text-blue-400 text-xs font-semibold uppercase tracking-wider">Pasión y profesionalismo</div>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-zinc-100 leading-tight">El arte de cortar bien, perfeccionado paso a paso.</h2>
                     <p class="text-zinc-300 leading-relaxed font-light text-base sm:text-lg">
-                        Hola, soy <strong class="text-blue-400 font-semibold">Lucas Robledo</strong>. Me dedico a brindar una experiencia de barbería moderna y de alta calidad en Paso de los Libres. Cada corte está pensado para resaltar tu estilo personal con prolijidad y técnica.
+                        Hola, soy <strong class="text-blue-400 font-semibold">Lucas Robledo</strong>. Me dedico a brindar una experiencia de barbería moderna en Paso de los Libres. Cada corte está pensado para resaltar tu estilo con prolijidad y técnica.
                     </p>
                     <p class="text-zinc-400 leading-relaxed font-light text-sm">
-                        Utilizo herramientas profesionales, maquinarias de precisión y técnicas avanzadas en degradados y perfilados. Mi objetivo es que cada visita a la barbería sea un momento de renovación total.
+                        Trabajo con máquinas de precisión y herramientas profesionales, con foco en degradados y perfilados. Mi objetivo es que cada visita sea un momento de renovación.
                     </p>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div class="flex items-start space-x-3 bg-dark-900 p-4 rounded-2xl border border-zinc-800">
                             <div class="text-blue-400 text-xl mt-0.5"><i class="fa-solid fa-scissors"></i></div>
-                            <div>
-                                <h4 class="font-semibold text-zinc-200 text-sm">Degradados Limpios</h4>
-                                <p class="text-xs text-zinc-400 mt-0.5">Fade y taper adaptados a tu estructura.</p>
-                            </div>
+                            <div><h4 class="font-semibold text-zinc-200 text-sm">Degradados limpios</h4><p class="text-xs text-zinc-400 mt-0.5">Fade y taper adaptados a tu cabeza.</p></div>
                         </div>
                         <div class="flex items-start space-x-3 bg-dark-900 p-4 rounded-2xl border border-zinc-800">
-                            <div class="text-blue-400 text-xl mt-0.5"><i class="fa-solid fa-face-smile"></i></div>
-                            <div>
-                                <h4 class="font-semibold text-zinc-200 text-sm">Atención Dedicada</h4>
-                                <p class="text-xs text-zinc-400 mt-0.5">Asesoramiento de imagen y estilo.</p>
-                            </div>
+                            <div class="text-blue-400 text-xl mt-0.5"><i class="fa-solid fa-comments"></i></div>
+                            <div><h4 class="font-semibold text-zinc-200 text-sm">Asesoramiento</h4><p class="text-xs text-zinc-400 mt-0.5">Te ayudo a elegir el corte que te queda.</p></div>
                         </div>
                     </div>
-
-                    <div class="pt-4">
-                        <a href="#reserva" class="inline-flex items-center gap-2 text-blue-400 font-semibold hover:text-blue-300 transition-colors text-base">
-                            Quiero reservar un turno ahora <i class="fa-solid fa-arrow-right text-sm"></i>
-                        </a>
-                    </div>
+                    <a href="#reserva" class="inline-flex items-center gap-2 text-blue-400 font-semibold hover:text-blue-300 transition-colors pt-2">Quiero reservar un turno <i class="fa-solid fa-arrow-right text-sm"></i></a>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- SERVICES & PRICING SECTION -->
-    <section id="servicios" class="py-20 bg-dark-900 relative">
+    <!-- SERVICIOS -->
+    <section id="servicios" class="py-20 bg-dark-900 relative scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Tarifas Transparentes</span>
-                <h2 class="font-serif text-3xl sm:text-5xl font-bold mt-2 mb-4">Servicios & Precios</h2>
-                <p class="text-zinc-400 font-light text-sm sm:text-base">Selecciona tu servicio favorito y agenda tu espacio en segundos.</p>
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Tarifas claras</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mt-2 mb-4">Servicios y precios</h2>
+                <p class="text-zinc-400 font-light text-sm sm:text-base">Elegí tu servicio y reservá tu lugar en segundos.</p>
             </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- Service 1 -->
-                <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-6 border border-blue-500/20 shadow-inner">
-                            <i class="fa-solid fa-scissors"></i>
-                        </div>
-                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Corte Clásico</h3>
-                        <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Corte tradicional a tijera o máquina, acabado prolijo y terminación.</p>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
-                            <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 30 min</span>
-                            <span id="price-card-Corte Clásico" class="font-serif text-2xl font-bold text-blue-400">$8.000</span>
-                        </div>
-                        <button onclick="selectServiceAndScroll('Corte Clásico')" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
-                            Reservar Este
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Service 2 -->
-                <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-6 border border-blue-500/20 shadow-inner">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        </div>
-                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Perfilado y Barba</h3>
-                        <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Definición de contornos, navaja y productos hidratantes profesionales.</p>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
-                            <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 25 min</span>
-                            <span id="price-card-Perfilado y Barba" class="font-serif text-2xl font-bold text-blue-400">$5.000</span>
-                        </div>
-                        <button onclick="selectServiceAndScroll('Perfilado y Barba')" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
-                            Reservar Este
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Service 3 -->
-                <div class="bg-gradient-to-b from-dark-800 to-dark-700 rounded-3xl p-6 sm:p-7 border-2 border-blue-500 shadow-xl shadow-blue-500/15 flex flex-col justify-between group relative overflow-hidden transform lg:-translate-y-2">
-                    <div class="absolute top-3 right-3 bg-blue-600 text-white font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow">
-                        Más Popular
-                    </div>
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center text-xl mb-6 shadow-md">
-                            <i class="fa-solid fa-crown"></i>
-                        </div>
-                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Combo Completo</h3>
-                        <p class="text-xs text-zinc-300 mb-6 leading-relaxed">Corte de cabello completo + Perfilado de barba con toallas calientes.</p>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-600">
-                            <span class="text-xs text-zinc-300"><i class="fa-regular fa-clock mr-1"></i> 50 min</span>
-                            <span id="price-card-Combo Completo" class="font-serif text-2xl font-bold text-blue-400">$12.000</span>
-                        </div>
-                        <button onclick="selectServiceAndScroll('Combo Completo')" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3 rounded-2xl transition-all text-sm shadow-lg">
-                            Reservar Combo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Service 4 -->
-                <div class="bg-dark-800 rounded-3xl p-6 sm:p-7 border border-zinc-800 hover:border-blue-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden shadow-lg">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-6 border border-blue-500/20 shadow-inner">
-                            <i class="fa-solid fa-face-smile"></i>
-                        </div>
-                        <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">Styling y Cejas</h3>
-                        <p class="text-xs text-zinc-400 mb-6 leading-relaxed">Peinado especializado con productos premium y prolijado de cejas.</p>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-4 pt-4 border-t border-zinc-700/60">
-                            <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> 20 min</span>
-                            <span id="price-card-Styling y Cejas" class="font-serif text-2xl font-bold text-blue-400">$3.000</span>
-                        </div>
-                        <button onclick="selectServiceAndScroll('Styling y Cejas')" class="w-full bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold py-3 rounded-2xl transition-all text-sm shadow-md">
-                            Reservar Este
-                        </button>
-                    </div>
-                </div>
-
-            </div>
+            <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </div>
     </section>
 
-    <!-- ONLINE BOOKING SYSTEM SECTION -->
-    <section id="reserva" class="py-20 bg-dark-800 relative">
+    <!-- RESERVA -->
+    <section id="reserva" class="py-20 bg-dark-800 relative scroll-mt-20">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Reserva Rápida</span>
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3">Agenda tu Turno Online</h2>
-                <p class="text-zinc-400 font-light text-sm">Elige tu servicio, fecha y hora. ¡Te esperamos en la barbería!</p>
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Reserva rápida</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-3">Reservá tu turno online</h2>
+                <p class="text-zinc-400 font-light text-sm">Elegí servicio, día y horario. Solo ves los horarios que están libres.</p>
             </div>
 
-            <div class="bg-dark-900 border border-zinc-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
-                
-                <form id="booking-form" onsubmit="handleBooking(event)" class="space-y-6">
+            <div class="bg-dark-900 border border-zinc-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
+                <form id="booking-form" class="space-y-6" novalidate>
                     <div>
-                        <label class="block text-sm font-semibold text-zinc-300 mb-2">1. Selecciona el Servicio</label>
-                        <select id="service-select" required onchange="updateServicePrice()" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
-                            <option value="Corte Clásico">Corte Clásico (30 min)</option>
-                            <option value="Perfilado y Barba">Perfilado y Barba (25 min)</option>
-                            <option value="Combo Completo" selected>Combo Completo (Corte + Barba) (50 min)</option>
-                            <option value="Styling y Cejas">Styling y Cejas (20 min)</option>
-                        </select>
+                        <label for="service-select" class="block text-sm font-semibold text-zinc-300 mb-2">1. Servicio</label>
+                        <select id="service-select" required class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors"></select>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-zinc-300 mb-2">2. Fecha del Turno</label>
-                            <input type="date" id="booking-date" required class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-zinc-300 mb-2">3. Horario (15:00 a 20:00)</label>
-                            <select id="booking-time" required class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
-                                <option value="">Selecciona hora...</option>
-                                <option value="15:00 hs">15:00 hs</option>
-                                <option value="16:00 hs">16:00 hs</option>
-                                <option value="17:00 hs">17:00 hs</option>
-                                <option value="18:00 hs">18:00 hs</option>
-                                <option value="19:00 hs">19:00 hs</option>
-                                <option value="20:00 hs">20:00 hs</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label for="booking-date" class="block text-sm font-semibold text-zinc-300 mb-2">2. Día <span class="font-normal text-zinc-500">(lunes a sábado)</span></label>
+                        <input type="date" id="booking-date" required class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors">
+                        <p id="date-label" class="text-xs text-blue-400 mt-2 capitalize"></p>
                     </div>
 
-                    <div class="space-y-4 pt-2">
+                    <div>
+                        <span class="block text-sm font-semibold text-zinc-300 mb-2">3. Horario</span>
+                        <div id="slots" class="grid grid-cols-3 sm:grid-cols-6 gap-2"></div>
+                        <p id="slots-hint" class="text-xs text-zinc-500 mt-2"></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div>
-                            <label class="block text-sm font-semibold text-zinc-300 mb-2">Tu Nombre y Apellido</label>
-                            <input type="text" id="client-name" required placeholder="Ej: Juan Pérez" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
+                            <label for="client-name" class="block text-sm font-semibold text-zinc-300 mb-2">Nombre y apellido</label>
+                            <input type="text" id="client-name" required maxlength="60" autocomplete="name" placeholder="Ej: Juan Pérez" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-zinc-300 mb-2">Tu Teléfono / WhatsApp</label>
-                            <input type="tel" id="client-phone" required placeholder="Ej: 3772449950" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base">
+                            <label for="client-phone" class="block text-sm font-semibold text-zinc-300 mb-2">WhatsApp</label>
+                            <input type="tel" id="client-phone" required maxlength="20" autocomplete="tel" inputmode="tel" placeholder="Ej: 3772 449950" class="w-full bg-dark-800 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors">
                         </div>
                     </div>
 
                     <div class="pt-6 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div>
-                            <span class="text-xs text-zinc-400 block">Total a Pagar:</span>
-                            <span id="price-display" class="font-serif text-3xl font-bold text-blue-400">$12.000</span>
+                        <div class="text-center sm:text-left">
+                            <span class="text-xs text-zinc-400 block">Total a pagar en la barbería</span>
+                            <span id="price-display" class="font-serif text-3xl font-bold text-blue-400">$0</span>
                         </div>
-                        <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-8 py-4 rounded-2xl shadow-xl shadow-blue-500/25 transition-all transform hover:-translate-y-0.5 text-base flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-check-circle text-lg"></i> Confirmar Mi Turno
+                        <button id="booking-submit" type="submit" class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 disabled:opacity-60 disabled:cursor-wait text-white font-bold px-8 py-4 rounded-2xl shadow-xl shadow-blue-500/25 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-check-circle text-lg"></i> <span>Confirmar turno</span>
                         </button>
                     </div>
                 </form>
 
                 <div id="booking-success" class="hidden text-center py-10 space-y-6">
-                    <div class="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center text-blue-400 text-3xl mx-auto animate-bounce shadow-lg">
-                        <i class="fa-solid fa-check"></i>
-                    </div>
-                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-zinc-100">¡Turno Agendado con Éxito!</h3>
-                    <p class="text-zinc-300 max-w-md mx-auto text-sm sm:text-base leading-relaxed px-2" id="success-details">
-                        Tu turno ha sido registrado en el sistema.
-                    </p>
-                    <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
-                        <button onclick="resetBookingForm()" class="bg-dark-800 hover:bg-dark-700 text-zinc-200 font-semibold px-6 py-3.5 rounded-2xl border border-zinc-700 text-sm">
-                            Reservar Otro Turno
-                        </button>
-                        <a id="whatsapp-confirm-btn" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
-                            <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Turno a Lucas por WhatsApp
+                    <div class="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center text-blue-400 text-3xl mx-auto shadow-lg"><i class="fa-solid fa-check"></i></div>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-zinc-100">¡Turno reservado!</h3>
+                    <p id="success-details" class="text-zinc-300 max-w-md mx-auto text-sm sm:text-base leading-relaxed px-2"></p>
+                    <p class="text-xs text-zinc-500">Mandale el turno a Lucas por WhatsApp para que te lo confirme.</p>
+                    <div class="pt-2 flex flex-col sm:flex-row justify-center gap-4">
+                        <a id="whatsapp-confirm-btn" href="#" target="_blank" rel="noopener" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-xl">
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Enviar turno a Lucas
                         </a>
+                        <button id="booking-reset" type="button" class="bg-dark-800 hover:bg-dark-700 text-zinc-200 font-semibold px-6 py-3.5 rounded-2xl border border-zinc-700 text-sm">Reservar otro turno</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- GALLERY SECTION -->
-    <section id="galeria" class="py-20 bg-dark-900 relative">
+    <!-- GALERÍA / CARRUSEL -->
+    <section id="galeria" class="py-20 bg-dark-900 relative scroll-mt-20 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Trabajos Reales</span>
-                <h2 class="font-serif text-3xl sm:text-5xl font-bold mt-2 mb-4">Galería de Cortes</h2>
-                <p class="text-zinc-400 font-light text-sm sm:text-base">Degradados limpios, prolijidad y estilo en cada sesión de Lucas Robledo.</p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="Certificado Oficial" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
-                        <div>
-                            <span class="text-xs text-blue-400 uppercase tracking-widest font-semibold">Certificación Oficial</span>
-                            <h4 class="font-serif text-lg font-bold text-zinc-100">Avalado por Lionel Ferro</h4>
-                        </div>
-                    </div>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
+                <div class="max-w-2xl">
+                    <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Trabajos</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold mt-2 mb-3">Galería de cortes</h2>
+                    <p id="gallery-subtitle" class="text-zinc-400 font-light text-sm sm:text-base">Degradados limpios, prolijidad y estilo en cada sesión.</p>
                 </div>
-
-                <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=800&auto=format&fit=crop" alt="Corte Moderno y Fade" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
-                        <div>
-                            <span class="text-xs text-blue-400 uppercase tracking-widest font-semibold">Fade / Degradado</span>
-                            <h4 class="font-serif text-lg font-bold text-zinc-100">Corte Moderno y Precisión</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative group overflow-hidden rounded-3xl border border-zinc-800 bg-dark-800 aspect-square shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=80&w=800&auto=format&fit=crop" alt="Perfilado y Cejas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/30 to-transparent opacity-90 flex items-end p-6">
-                        <div>
-                            <span class="text-xs text-blue-400 uppercase tracking-widest font-semibold">Barba & Cejas</span>
-                            <h4 class="font-serif text-lg font-bold text-zinc-100">Perfilado y Styling Profesional</h4>
-                        </div>
-                    </div>
+                <div class="flex items-center gap-3">
+                    <span id="car-counter" class="text-sm text-zinc-500 tabular-nums mr-1"></span>
+                    <button id="car-prev" aria-label="Foto anterior" class="w-12 h-12 rounded-full bg-dark-800 border border-zinc-700 hover:border-blue-500 hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button id="car-next" aria-label="Foto siguiente" class="w-12 h-12 rounded-full bg-dark-800 border border-zinc-700 hover:border-blue-500 hover:text-blue-400 transition-colors"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
+
+            <div id="car-track" class="relative flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth pb-2" aria-roledescription="carrusel" tabindex="0">
+                <div class="w-full text-center text-zinc-500 py-24"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Cargando trabajos…</div>
+            </div>
+            <div id="car-dots" class="flex justify-center flex-wrap gap-2 mt-6"></div>
         </div>
     </section>
 
-    <!-- CONTACT & LOCATION SECTION -->
-    <section id="contacto" class="py-20 bg-dark-800 border-t border-zinc-800">
+    <!-- CONTACTO -->
+    <section id="contacto" class="py-20 bg-dark-800 border-t border-zinc-800 scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                
                 <div class="space-y-6">
-                    <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Ubicación & Contacto</span>
-                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-zinc-100">Visita Lucas Robledo Barbershop</h2>
-                    <p class="text-zinc-300 font-light leading-relaxed text-sm sm:text-base">
-                        Vení a vivir una experiencia de barbería de primer nivel en <strong class="text-white">Paso de los Libres, Corrientes</strong>. Excelente ambiente, atención personalizada y resultados garantizados.
-                    </p>
-
+                    <span class="text-xs uppercase tracking-widest text-blue-400 font-bold">Ubicación y contacto</span>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-zinc-100">Visitá Lucas Robledo Barbershop</h2>
+                    <p class="text-zinc-300 font-light leading-relaxed text-sm sm:text-base">Buen ambiente, atención personalizada y un corte que te va a gustar, en <strong class="text-white">Paso de los Libres, Corrientes</strong>.</p>
                     <div class="space-y-4 pt-2">
                         <div class="flex items-start space-x-4">
-                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-inner">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-zinc-200">Dirección</h4>
-                                <p class="text-sm text-zinc-400">Paso de los Libres, Corrientes, Argentina</p>
-                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20"><i class="fa-solid fa-location-dot"></i></div>
+                            <div><h4 class="font-semibold text-zinc-200">Dirección</h4><p id="address-text" class="text-sm text-zinc-400"></p></div>
                         </div>
-
                         <div class="flex items-start space-x-4">
-                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-inner">
-                                <i class="fa-regular fa-clock"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-zinc-200">Horarios de Atención</h4>
-                                <p class="text-sm text-zinc-400">Lunes a Sábado: 15:00 hs - 20:00 hs</p>
-                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20"><i class="fa-regular fa-clock"></i></div>
+                            <div><h4 class="font-semibold text-zinc-200">Horarios</h4><p class="text-sm text-zinc-400">Lunes a sábado: 15:00 a 20:00 hs · Domingo cerrado</p></div>
                         </div>
-
                         <div class="flex items-start space-x-4">
-                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20 shadow-inner">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-zinc-200">WhatsApp Oficial</h4>
-                                <p class="text-sm text-zinc-400">+54 9 3772 44-9950</p>
-                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/20"><i class="fa-brands fa-whatsapp"></i></div>
+                            <div><h4 class="font-semibold text-zinc-200">WhatsApp</h4><p class="text-sm text-zinc-400">+54 9 3772 44-9950</p></div>
                         </div>
                     </div>
-
                     <div class="pt-4 flex flex-col sm:flex-row items-center gap-4">
-                        <a href="https://wa.me/5493772449950?text=Hola%20Lucas,%20quiero%20hacer%20una%20consulta%20sobre%20tus%20turnos" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all">
+                        <a id="wa-contact" href="#" target="_blank" rel="noopener" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-lg transition-all">
                             <i class="fa-brands fa-whatsapp text-lg"></i> Chatear por WhatsApp
                         </a>
-                        <a href="#reserva" class="w-full sm:w-auto bg-dark-700 hover:bg-dark-600 text-zinc-200 font-semibold px-6 py-3.5 rounded-2xl text-sm transition-all text-center border border-zinc-600">
-                            Agendar Turno Online
+                        <a id="maps-link" href="#" target="_blank" rel="noopener" class="w-full sm:w-auto bg-dark-700 hover:bg-dark-600 text-zinc-200 font-semibold px-6 py-3.5 rounded-2xl text-sm transition-all text-center border border-zinc-600">
+                            <i class="fa-solid fa-route mr-2 text-blue-400"></i> Cómo llegar
                         </a>
                     </div>
                 </div>
-
-                <div class="bg-dark-900 border border-zinc-800 rounded-3xl p-6 h-96 flex flex-col justify-between relative overflow-hidden shadow-2xl">
-                    <div class="absolute inset-0 opacity-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop');"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/50 to-transparent"></div>
-                    
-                    <div class="relative z-10 flex justify-between items-start">
-                        <span class="bg-dark-800/90 border border-zinc-700 text-blue-400 text-xs font-semibold px-3.5 py-2 rounded-xl backdrop-blur-md shadow">
-                            <i class="fa-solid fa-map-pin mr-1.5"></i> Paso de los Libres, Corrientes
-                        </span>
-                    </div>
-
-                    <div class="relative z-10 bg-dark-900/90 border border-zinc-800 p-5 rounded-2xl backdrop-blur-md shadow-lg">
-                        <h4 class="font-serif font-bold text-zinc-100 text-lg">Lucas Robledo Barbershop</h4>
-                        <p class="text-xs text-zinc-400 mt-1">Atención preferencial con reserva online y turnos programados.</p>
-                    </div>
+                <div class="bg-dark-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl h-96">
+                    <iframe id="map-frame" title="Mapa de la barbería" class="w-full h-full grayscale-[60%] invert-[90%] hue-rotate-180" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="bg-dark-900 border-t border-zinc-800 py-12 text-center text-xs text-zinc-500">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        <div class="max-w-7xl mx-auto px-4 space-y-4">
             <div class="flex items-center justify-center space-x-2">
-                <div class="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow">LR</div>
+                <div class="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs">LR</div>
                 <span class="font-serif text-sm font-bold text-zinc-300">LUCAS ROBLEDO BARBERSHOP</span>
             </div>
-            <p>Paso de los Libres, Corrientes • Certificación Profesional por Lionel Ferro © 2026.</p>
+            <p>Paso de los Libres, Corrientes © <span id="year"></span></p>
+            <button id="admin-open" class="text-zinc-600 hover:text-blue-400 transition-colors"><i class="fa-solid fa-lock mr-1"></i> Acceso barbero</button>
         </div>
     </footer>
 
-    <!-- PIN MODAL FOR ADMIN ACCESS -->
-    <div id="pin-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+    <!-- BOTÓN FLOTANTE WHATSAPP -->
+    <a id="wa-float" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" class="fixed bottom-5 right-5 z-30 w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white text-3xl flex items-center justify-center shadow-2xl shadow-emerald-500/30 transition-transform hover:scale-105">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- MODAL LOGIN -->
+    <div id="login-modal" class="modal fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm items-center justify-center p-4">
+        <div class="animate-fade-in bg-dark-800 border border-zinc-700 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl">
             <div class="flex items-center justify-between pb-4 border-b border-zinc-700 mb-6">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-lock text-blue-400 text-xl"></i>
-                    <h3 class="font-serif text-xl font-bold text-zinc-100">Acceso Restringido</h3>
-                </div>
-                <button onclick="closePinModal()" class="text-zinc-400 hover:text-zinc-100 text-xl p-2 rounded-xl bg-dark-900">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <div class="flex items-center gap-2.5"><i class="fa-solid fa-lock text-blue-400 text-xl"></i><h3 class="font-serif text-xl font-bold">Acceso del barbero</h3></div>
+                <button data-close="login-modal" aria-label="Cerrar" class="text-zinc-400 hover:text-zinc-100 text-xl w-10 h-10 rounded-xl bg-dark-900"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form onsubmit="verifyPin(event)" class="space-y-5">
+            <form id="login-form" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-semibold text-zinc-300 mb-2">Ingrese el PIN de Administrador</label>
-                    <input type="password" id="pin-input" required placeholder="••••••••" class="w-full bg-dark-900 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500 transition-colors text-center text-lg tracking-widest">
+                    <label for="login-email" class="block text-sm font-semibold text-zinc-300 mb-2">Email</label>
+                    <input type="email" id="login-email" required autocomplete="username" class="w-full bg-dark-900 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500">
                 </div>
-                <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closePinModal()" class="bg-dark-900 hover:bg-dark-700 text-zinc-300 font-semibold px-5 py-2.5 rounded-xl border border-zinc-700 text-sm">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
-                        Ingresar
-                    </button>
+                <div>
+                    <label for="login-pass" class="block text-sm font-semibold text-zinc-300 mb-2">Contraseña</label>
+                    <input type="password" id="login-pass" required autocomplete="current-password" class="w-full bg-dark-900 border border-zinc-700 rounded-2xl px-4 py-3.5 text-zinc-100 focus:outline-none focus:border-blue-500">
+                </div>
+                <p id="login-error" class="hidden text-sm text-red-400"></p>
+                <div class="flex items-center justify-between gap-3 pt-2">
+                    <button type="button" id="forgot-pass" class="text-xs text-zinc-400 hover:text-blue-400">Olvidé mi contraseña</button>
+                    <button type="submit" id="login-submit" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 disabled:opacity-60 text-white font-bold px-6 py-3 rounded-xl text-sm shadow">Ingresar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ADMIN MODAL -->
-    <div id="admin-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between pb-4 border-b border-zinc-700 mb-6">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-user-shield text-blue-400 text-xl"></i>
-                    <h3 class="font-serif text-xl sm:text-2xl font-bold text-zinc-100">Panel de Administración</h3>
+    <!-- PANEL ADMIN -->
+    <div id="admin-modal" class="modal fixed inset-0 z-50 hidden bg-dark-900/90 backdrop-blur-sm items-center justify-center p-0 sm:p-4">
+        <div class="animate-fade-in bg-dark-800 border border-zinc-700 sm:rounded-3xl max-w-3xl w-full h-full sm:h-auto sm:max-h-[92vh] flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between px-5 sm:px-8 pt-5 sm:pt-7 pb-4 border-b border-zinc-700">
+                <div>
+                    <div class="flex items-center gap-2.5"><i class="fa-solid fa-user-shield text-blue-400 text-xl"></i><h3 class="font-serif text-xl sm:text-2xl font-bold">Panel de administración</h3></div>
+                    <p id="admin-email" class="text-xs text-zinc-500 mt-1"></p>
                 </div>
-                <button onclick="closeAdminModal()" class="text-zinc-400 hover:text-zinc-100 text-xl p-2 rounded-xl bg-dark-900">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <div class="flex items-center gap-2">
+                    <button id="logout-btn" class="text-xs text-zinc-400 hover:text-red-400 border border-zinc-700 px-3 py-2 rounded-xl"><i class="fa-solid fa-right-from-bracket mr-1"></i> Salir</button>
+                    <button data-close="admin-modal" aria-label="Cerrar" class="text-zinc-400 hover:text-zinc-100 text-xl w-10 h-10 rounded-xl bg-dark-900"><i class="fa-solid fa-xmark"></i></button>
+                </div>
             </div>
 
-            <div class="space-y-6 mb-6">
-                <!-- SECCIÓN 1: GESTIÓN DE PRECIOS -->
-                <div class="bg-dark-900 p-4 rounded-2xl border border-zinc-700/80 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Gestión de Precios</span>
-                            <p class="text-xs text-zinc-400">Modifica los valores vigentes de los servicios</p>
+            <div class="px-5 sm:px-8 pt-4">
+                <div class="grid grid-cols-3 gap-1 bg-dark-900 p-1 rounded-2xl border border-zinc-700 text-sm font-semibold" role="tablist">
+                    <button class="admin-tab py-2.5 rounded-xl transition-colors" data-tab="turnos"><i class="fa-regular fa-calendar mr-1.5"></i>Turnos</button>
+                    <button class="admin-tab py-2.5 rounded-xl transition-colors" data-tab="fotos"><i class="fa-solid fa-images mr-1.5"></i>Fotos</button>
+                    <button class="admin-tab py-2.5 rounded-xl transition-colors" data-tab="precios"><i class="fa-solid fa-tags mr-1.5"></i>Precios</button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-5 sm:px-8 py-5">
+                <!-- TAB TURNOS -->
+                <div id="tab-turnos" class="admin-panel space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex gap-1 bg-dark-900 p-1 rounded-xl border border-zinc-700 text-xs font-semibold">
+                            <button class="turnos-filter px-3 py-1.5 rounded-lg" data-filter="proximos">Próximos</button>
+                            <button class="turnos-filter px-3 py-1.5 rounded-lg" data-filter="pasados">Anteriores</button>
                         </div>
-                        <button onclick="savePrices()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition-all">
-                            Guardar Precios
-                        </button>
+                        <span id="turnos-count" class="bg-blue-500/20 text-blue-400 font-bold px-3 py-1.5 rounded-xl text-xs border border-blue-500/30">0 turnos</span>
                     </div>
-                    <div id="admin-prices-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                        <!-- Inputs generados por JS -->
+                    <div id="admin-turnos-list" class="space-y-3"></div>
+                    <div class="pt-2 text-right">
+                        <button id="clear-past" class="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-4 py-2.5 rounded-xl bg-red-500/10">Borrar turnos anteriores</button>
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: TURNOS AGENDADOS -->
-                <div class="flex items-center justify-between bg-dark-900 p-4 rounded-2xl border border-zinc-700/80">
-                    <div>
-                        <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Estado de Turnos (Nube)</span>
-                        <p class="text-sm text-zinc-300">Turnos agendados por clientes</p>
-                    </div>
-                    <span id="turnos-count" class="bg-blue-500/20 text-blue-400 font-bold px-3.5 py-1.5 rounded-xl text-sm border border-blue-500/30">0 turnos</span>
-                </div>
-
-                <div id="admin-turnos-list" class="space-y-3">
-                    <!-- Populated via Firebase -->
-                </div>
-            </div>
-
-            <div class="pt-4 border-t border-zinc-700 flex flex-col sm:flex-row justify-between items-center gap-3">
-                <button onclick="clearAllTurnos()" class="w-full sm:w-auto text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-4 py-2.5 rounded-xl transition-colors bg-red-500/10">
-                    Borrar Todos los Turnos
-                </button>
-                <button onclick="closeAdminModal()" class="w-full sm:w-auto bg-dark-700 hover:bg-dark-600 text-zinc-200 font-semibold px-6 py-2.5 rounded-xl text-sm">
-                    Cerrar Panel
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- CUSTOM NOTIFICATION MODAL (Reemplazo sofisticado del alert nativo) -->
-    <div id="custom-modal" class="fixed inset-0 z-50 hidden bg-dark-900/85 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-dark-800 border border-zinc-700 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative space-y-4">
-            <div class="w-14 h-14 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center text-blue-400 text-2xl mx-auto shadow-inner">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <h3 id="custom-modal-title" class="font-serif text-xl font-bold text-zinc-100">¡Éxito!</h3>
-            <p id="custom-modal-text" class="text-xs sm:text-sm text-zinc-300 leading-relaxed">Los cambios se guardaron correctamente.</p>
-            <button onclick="closeCustomModal()" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold py-3 rounded-xl text-sm shadow-lg transition-all">
-                Aceptar
-            </button>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC WITH FIREBASE & CUSTOM MODAL -->
-    <script>
-        // Configuración de Firebase integrada
-        const firebaseConfig = {
-            apiKey: "AIzaSyAfVcjUdDXs-8SVMPkUoqzN4YuyPPPkOcs",
-            authDomain: "lucas-robledo-barbershop.firebaseapp.com",
-            projectId: "lucas-robledo-barbershop",
-            storageBucket: "lucas-robledo-barbershop.firebasestorage.app",
-            messagingSenderId: "973219962522",
-            appId: "1:973219962522:web:714be86853d5f7488f0923",
-            measurementId: "G-Z82TT4J53B"
-        };
-
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // Precios por defecto
-        let currentPrices = {
-            "Corte Clásico": 8000,
-            "Perfilado y Barba": 5000,
-            "Combo Completo": 12000,
-            "Styling y Cejas": 3000
-        };
-
-        // Funciones para manejar la ventana flotante personalizada (Custom Modal)
-        function showCustomModal(title, text) {
-            document.getElementById('custom-modal-title').innerText = title;
-            document.getElementById('custom-modal-text').innerText = text;
-            document.getElementById('custom-modal').classList.remove('hidden');
-        }
-
-        function closeCustomModal() {
-            document.getElementById('custom-modal').classList.add('hidden');
-        }
-
-        // Cargar precios al iniciar la página
-        async function fetchPrices() {
-            try {
-                const doc = await db.collection('settings').doc('prices').get();
-                if (doc.exists) {
-                    currentPrices = doc.data();
-                } else {
-                    await db.collection('settings').doc('prices').set(currentPrices);
-                }
-                updateUIWithPrices();
-            } catch (error) {
-                console.error("Error al cargar precios:", error);
-                updateUIWithPrices();
-            }
-        }
-
-        function updateUIWithPrices() {
-            for (const [service, price] of Object.entries(currentPrices)) {
-                const cardSpan = document.getElementById(`price-card-${service}`);
-                if (cardSpan) {
-                    cardSpan.innerText = '$' + Number(price).toLocaleString('es-AR');
-                }
-            }
-            updateServicePrice();
-        }
-
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        document.querySelectorAll('.mobile-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('booking-date').min = today;
-        document.getElementById('booking-date').value = today;
-
-        function updateServicePrice() {
-            const select = document.getElementById('service-select');
-            const selectedService = select.value;
-            const price = currentPrices[selectedService] || 0;
-            document.getElementById('price-display').innerText = '$' + Number(price).toLocaleString('es-AR');
-        }
-
-        function selectServiceAndScroll(serviceName) {
-            const select = document.getElementById('service-select');
-            for (let i = 0; i < select.options.length; i++) {
-                if (select.options[i].value === serviceName) {
-                    select.selectedIndex = i;
-                    break;
-                }
-            }
-            updateServicePrice();
-            document.getElementById('reserva').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        async function handleBooking(event) {
-            event.preventDefault();
-
-            const service = document.getElementById('service-select').value;
-            const date = document.getElementById('booking-date').value;
-            const time = document.getElementById('booking-time').value;
-            const name = document.getElementById('client-name').value;
-            const phone = document.getElementById('client-phone').value;
-            const pricePaid = currentPrices[service] || 0;
-
-            const turno = {
-                service,
-                date,
-                time,
-                name,
-                phone,
-                price: pricePaid,
-                createdAt: new Date().toISOString()
-            };
-
-            try {
-                await db.collection('turnos').add(turno);
-
-                document.getElementById('success-details').innerHTML = `¡Gracias <strong>${name}</strong>! Tu turno para <strong>${service}</strong> ($${Number(pricePaid).toLocaleString('es-AR')}) el día <strong>${date}</strong> a las <strong>${time} hs</strong> ha sido registrado correctamente.`;
-
-                const waText = encodeURIComponent(`Hola Lucas! Reservé un turno online para ${service} ($${Number(pricePaid).toLocaleString('es-AR')}) el día ${date} a las ${time} hs. Mi nombre es ${name} (${phone}).`);
-                document.getElementById('whatsapp-confirm-btn').href = `https://wa.me/5493772449950?text=${waText}`;
-
-                document.getElementById('booking-form').classList.add('hidden');
-                document.getElementById('booking-success').classList.remove('hidden');
-            } catch (error) {
-                console.error("Error al guardar el turno: ", error);
-                showCustomModal("Error", "Hubo un problema al registrar el turno. Inténtalo de nuevo.");
-            }
-        }
-
-        function resetBookingForm() {
-            document.getElementById('booking-form').reset();
-            document.getElementById('booking-date').value = today;
-            updateServicePrice();
-            document.getElementById('booking-form').classList.remove('hidden');
-            document.getElementById('booking-success').classList.add('hidden');
-        }
-
-        // Admin PIN Protection (PIN: 30102003)
-        const ADMIN_PIN = "30102003";
-
-        function openAdminPrompt() {
-            document.getElementById('pin-input').value = '';
-            document.getElementById('pin-modal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('pin-input').focus(), 100);
-        }
-
-        function closePinModal() {
-            document.getElementById('pin-modal').classList.add('hidden');
-        }
-
-        function verifyPin(event) {
-            event.preventDefault();
-            const enteredPin = document.getElementById('pin-input').value;
-            if (enteredPin === ADMIN_PIN) {
-                closePinModal();
-                openAdminModal();
-            } else {
-                showCustomModal("Acceso Denegado", "PIN incorrecto. Verifica el código e intenta nuevamente.");
-                document.getElementById('pin-input').value = '';
-                document.getElementById('pin-input').focus();
-            }
-        }
-
-        function openAdminModal() {
-            renderAdminPricesForm();
-            renderAdminTurnos();
-            document.getElementById('admin-modal').classList.remove('hidden');
-        }
-
-        function closeAdminModal() {
-            document.getElementById('admin-modal').classList.add('hidden');
-        }
-
-        function renderAdminPricesForm() {
-            const container = document.getElementById('admin-prices-container');
-            container.innerHTML = Object.entries(currentPrices).map(([service, price]) => `
-                <div class="bg-dark-800 p-3 rounded-xl border border-zinc-700">
-                    <label class="block text-xs font-semibold text-zinc-300 mb-1">${service}</label>
-                    <input type="number" id="price-input-${service}" value="${price}" class="w-full bg-dark-900 border border-zinc-700 rounded-lg px-3 py-2 text-zinc-100 text-sm focus:outline-none focus:border-blue-500">
-                </div>
-            `).join('');
-        }
-
-        // Guardar nuevos precios en Firestore usando la ventana flotante
-        async function savePrices() {
-            try {
-                let updatedPrices = {};
-                for (const service of Object.keys(currentPrices)) {
-                    const inputVal = document.getElementById(`price-input-${service}`).value;
-                    updatedPrices[service] = Number(inputVal);
-                }
-
-                await db.collection('settings').doc('prices').set(updatedPrices);
-                currentPrices = updatedPrices;
-                updateUIWithPrices();
-                
-                // Ventana flotante moderna de éxito
-                showCustomModal("¡Precios Actualizados!", "Los nuevos valores de los servicios se guardaron correctamente en la nube.");
-            } catch (error) {
-                console.error("Error al guardar precios:", error);
-                showCustomModal("Error", "Hubo un problema al guardar los precios.");
-            }
-        }
-
-        async function renderAdminTurnos() {
-            const container = document.getElementById('admin-turnos-list');
-            container.innerHTML = `<p class="text-zinc-400 text-sm text-center py-4">Cargando turnos desde la nube...</p>`;
-
-            try {
-                const querySnapshot = await db.collection('turnos').get();
-                let turnos = [];
-                querySnapshot.forEach((doc) => {
-                    turnos.push({ id: doc.id, ...doc.data() });
-                });
-
-                document.getElementById('turnos-count').innerText = turnos.length + (turnos.length === 1 ? ' turno' : ' turnos');
-
-                if (turnos.length === 0) {
-                    container.innerHTML = `<p class="text-zinc-500 text-sm text-center py-8">No hay turnos agendados todavía.</p>`;
-                    return;
-                }
-
-                container.innerHTML = turnos.map(t => `
-                    <div class="bg-dark-900 border border-zinc-700/80 p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <!-- TAB FOTOS -->
+                <div id="tab-fotos" class="admin-panel hidden space-y-6">
+                    <div class="bg-dark-900 p-4 sm:p-5 rounded-2xl border border-zinc-700 space-y-4">
                         <div>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <span class="font-bold text-zinc-100 text-sm">${t.name}</span>
-                                <span class="bg-blue-500/10 text-blue-400 text-[10px] px-2 py-0.5 rounded border border-blue-500/20">${t.service} ${t.price ? '($' + Number(t.price).toLocaleString('es-AR') + ')' : ''}</span>
+                            <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Subir fotos de cortes</span>
+                            <p class="text-xs text-zinc-400 mt-0.5">Se achican automáticamente para que carguen rápido. Aparecen al instante en el carrusel.</p>
+                        </div>
+                        <label for="photo-input" class="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-zinc-700 hover:border-blue-500 rounded-2xl py-8 cursor-pointer transition-colors text-center">
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-blue-400"></i>
+                            <span class="text-sm font-semibold text-zinc-200">Tocá para elegir fotos</span>
+                            <span class="text-xs text-zinc-500">Podés elegir varias a la vez</span>
+                        </label>
+                        <input id="photo-input" type="file" accept="image/*" multiple class="hidden">
+                        <div id="pending-photos" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                        <div id="pending-actions" class="hidden flex-col sm:flex-row gap-3 sm:items-center justify-between">
+                            <select id="photo-category" class="bg-dark-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-sm text-zinc-100 focus:outline-none focus:border-blue-500">
+                                <option>Fade / Degradado</option>
+                                <option>Corte clásico</option>
+                                <option>Barba</option>
+                                <option>Cejas</option>
+                                <option>Diseño / Freestyle</option>
+                                <option>Otro</option>
+                            </select>
+                            <div class="flex gap-2">
+                                <button id="pending-clear" class="text-xs text-zinc-400 border border-zinc-700 px-4 py-2.5 rounded-xl">Cancelar</button>
+                                <button id="upload-btn" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow"><i class="fa-solid fa-upload mr-1.5"></i> Subir</button>
                             </div>
-                            <p class="text-xs text-zinc-300 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${t.date} a las <span class="text-blue-400 font-semibold">${t.time} hs</span></p>
-                            <p class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-phone text-[10px] mr-1"></i> Teléfono: ${t.phone}</p>
                         </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-800">
-                            <a href="https://wa.me/549${t.phone.replace(/\D/g,'')}?text=Hola%20${encodeURIComponent(t.name)},%20te%20escribo%20de%20Lucas%20Robledo%20Barbershop%20por%20tu%20turno%20el%20${t.date}%20a%20las%20${t.time}%20hs." target="_blank" class="text-emerald-400 hover:text-emerald-300 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl border border-emerald-500/20 transition-colors flex items-center gap-1.5 font-medium">
-                                <i class="fa-brands fa-whatsapp text-sm"></i> Contactar
-                            </a>
-                            <button onclick="deleteTurno('${t.id}')" class="text-red-400 hover:text-red-300 text-xs bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl border border-red-500/20 transition-colors font-medium">
-                                Eliminar
-                            </button>
+                        <p id="upload-status" class="text-xs text-blue-400"></p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Fotos publicadas</span>
+                            <span id="photos-count" class="text-xs text-zinc-500"></span>
+                        </div>
+                        <div id="admin-photos" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                    </div>
+
+                    <div class="bg-dark-900 p-4 sm:p-5 rounded-2xl border border-zinc-700 flex flex-col sm:flex-row gap-4 sm:items-center">
+                        <img id="admin-cert-preview" src="" alt="" class="w-full sm:w-32 aspect-[4/3] object-cover rounded-xl border border-zinc-700 bg-dark-800">
+                        <div class="flex-1">
+                            <span class="text-xs text-blue-400 font-bold uppercase tracking-wider">Foto del certificado</span>
+                            <p class="text-xs text-zinc-400 mt-0.5 mb-3">Reemplaza la imagen de ejemplo de la sección "Sobre mí" por la foto real de tu certificado.</p>
+                            <label class="inline-flex items-center gap-2 text-xs font-semibold bg-dark-700 hover:bg-dark-600 border border-zinc-600 px-4 py-2.5 rounded-xl cursor-pointer">
+                                <i class="fa-solid fa-image text-blue-400"></i> Cambiar foto
+                                <input id="cert-input" type="file" accept="image/*" class="hidden">
+                            </label>
                         </div>
                     </div>
-                `).join('');
-            } catch (error) {
-                console.error("Error al cargar turnos: ", error);
-                container.innerHTML = `<p class="text-red-400 text-sm text-center py-4">Error al cargar los turnos desde la nube.</p>`;
-            }
+                </div>
+
+                <!-- TAB PRECIOS -->
+                <div id="tab-precios" class="admin-panel hidden space-y-4">
+                    <p class="text-xs text-zinc-400">Modificá los precios vigentes. Se actualizan en la web para todos.</p>
+                    <div id="admin-prices-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                    <div class="text-right">
+                        <button id="save-prices" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow">Guardar precios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="modal fixed inset-0 z-[60] hidden bg-black/95 items-center justify-center">
+        <button data-close="lightbox" aria-label="Cerrar" class="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl z-10"><i class="fa-solid fa-xmark"></i></button>
+        <button id="lb-prev" aria-label="Anterior" class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white z-10"><i class="fa-solid fa-chevron-left"></i></button>
+        <button id="lb-next" aria-label="Siguiente" class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white z-10"><i class="fa-solid fa-chevron-right"></i></button>
+        <figure class="max-w-5xl w-full px-4 flex flex-col items-center">
+            <img id="lb-img" src="" alt="" class="max-h-[80vh] w-auto rounded-2xl shadow-2xl object-contain">
+            <figcaption class="text-center mt-4">
+                <span id="lb-cat" class="block text-xs text-blue-400 uppercase tracking-widest font-semibold"></span>
+                <span id="lb-caption" class="block font-serif text-lg text-zinc-100"></span>
+            </figcaption>
+        </figure>
+    </div>
+
+    <!-- AVISO / CONFIRMACIÓN -->
+    <div id="dialog-modal" class="modal fixed inset-0 z-[70] hidden bg-dark-900/85 backdrop-blur-sm items-center justify-center p-4">
+        <div class="animate-fade-in bg-dark-800 border border-zinc-700 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl space-y-4">
+            <div id="dialog-icon" class="w-14 h-14 rounded-full border-2 flex items-center justify-center text-2xl mx-auto"></div>
+            <h3 id="dialog-title" class="font-serif text-xl font-bold"></h3>
+            <p id="dialog-text" class="text-sm text-zinc-300 leading-relaxed"></p>
+            <div class="flex gap-3">
+                <button id="dialog-cancel" class="hidden flex-1 bg-dark-900 border border-zinc-700 text-zinc-300 font-semibold py-3 rounded-xl text-sm">Cancelar</button>
+                <button id="dialog-ok" class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3 rounded-xl text-sm shadow-lg">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // =====================================================================
+    //  CONFIGURACIÓN — editá estos valores si cambian
+    // =====================================================================
+    const CONFIG = {
+        whatsapp: "5493772449950",
+        // Poné la dirección exacta (ej: "Colón 1234, Paso de los Libres, Corrientes") para que el mapa la marque
+        address: "Paso de los Libres, Corrientes, Argentina",
+        timezone: "America/Argentina/Buenos_Aires",
+        slots: ["15:00", "16:00", "17:00", "18:00", "19:00", "20:00"],
+        galleryLimit: 30
+    };
+
+    const SERVICES = [
+        { name: "Corte Clásico",     dur: 30, icon: "fa-scissors",            desc: "Corte tradicional a tijera o máquina, con terminación prolija." },
+        { name: "Perfilado y Barba", dur: 25, icon: "fa-wand-magic-sparkles", desc: "Definición de contornos, navaja y productos hidratantes." },
+        { name: "Combo Completo",    dur: 50, icon: "fa-crown",               desc: "Corte completo + perfilado de barba con toalla caliente.", featured: true },
+        { name: "Styling y Cejas",   dur: 20, icon: "fa-face-smile",          desc: "Peinado con productos premium y prolijado de cejas." }
+    ];
+
+    let prices = { "Corte Clásico": 8000, "Perfilado y Barba": 5000, "Combo Completo": 12000, "Styling y Cejas": 3000 };
+
+    const FALLBACK_PHOTOS = [
+        { src: "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?q=80&w=900&auto=format&fit=crop", category: "Fade / Degradado", caption: "Corte moderno" },
+        { src: "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=80&w=900&auto=format&fit=crop", category: "Barba", caption: "Perfilado y styling" },
+        { src: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?q=80&w=900&auto=format&fit=crop", category: "Corte clásico", caption: "Terminación prolija" }
+    ];
+
+    // =====================================================================
+    //  FIREBASE
+    // =====================================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyAfVcjUdDXs-8SVMPkUoqzN4YuyPPPkOcs",
+        authDomain: "lucas-robledo-barbershop.firebaseapp.com",
+        projectId: "lucas-robledo-barbershop",
+        storageBucket: "lucas-robledo-barbershop.firebasestorage.app",
+        messagingSenderId: "973219962522",
+        appId: "1:973219962522:web:714be86853d5f7488f0923",
+        measurementId: "G-Z82TT4J53B"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    const serverTime = () => firebase.firestore.FieldValue.serverTimestamp();
+
+    // =====================================================================
+    //  UTILIDADES
+    // =====================================================================
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const money = n => "$" + Number(n || 0).toLocaleString("es-AR");
+    const cleanTime = t => String(t || "").replace(/\s*hs\.?$/i, "").trim();
+    const waLink = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+
+    function todayAR() {
+        return new Intl.DateTimeFormat("en-CA", { timeZone: CONFIG.timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    }
+    function nowMinutesAR() {
+        const [h, m] = new Intl.DateTimeFormat("en-GB", { timeZone: CONFIG.timezone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date()).split(":").map(Number);
+        return h * 60 + m;
+    }
+    function parseDate(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); }
+    function prettyDate(s) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(s || "")) return s || "";
+        return parseDate(s).toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" });
+    }
+    function normalizePhone(p) {
+        let d = String(p || "").replace(/\D/g, "");
+        if (d.startsWith("54")) return d.startsWith("549") ? d : "549" + d.slice(2);
+        if (d.startsWith("0")) d = d.slice(1);
+        return "549" + d;
+    }
+
+    // ---------- Modales ----------
+    function openModal(id) { const m = $(id); m.classList.remove("hidden"); m.classList.add("flex"); document.body.style.overflow = "hidden"; }
+    function closeModal(id) {
+        const m = $(id); m.classList.add("hidden"); m.classList.remove("flex");
+        if (![...document.querySelectorAll(".modal")].some(x => !x.classList.contains("hidden"))) document.body.style.overflow = "";
+        if (id === "lightbox") carousel.resume();
+    }
+    document.addEventListener("click", e => {
+        const btn = e.target.closest("[data-close]");
+        if (btn) closeModal(btn.dataset.close);
+        else if (e.target.classList.contains("modal") && e.target.id !== "dialog-modal") closeModal(e.target.id);
+    });
+    document.addEventListener("keydown", e => {
+        if (e.key !== "Escape") return;
+        const open = [...document.querySelectorAll(".modal")].filter(m => !m.classList.contains("hidden"));
+        const top = open.sort((a, b) => getComputedStyle(b).zIndex - getComputedStyle(a).zIndex)[0];
+        if (top && top.id !== "dialog-modal") closeModal(top.id);
+    });
+
+    // ---------- Avisos y confirmaciones (reemplazan alert/confirm) ----------
+    let dialogResolve = null;
+    const DIALOG_STYLES = {
+        ok:    { icon: "fa-check",                 cls: "bg-blue-500/20 border-blue-500 text-blue-400" },
+        error: { icon: "fa-triangle-exclamation",  cls: "bg-red-500/20 border-red-500 text-red-400" },
+        warn:  { icon: "fa-circle-question",       cls: "bg-amber-500/20 border-amber-500 text-amber-400" }
+    };
+    function showDialog(title, text, { type = "ok", confirm = false, okText = "Aceptar" } = {}) {
+        const s = DIALOG_STYLES[type];
+        $("dialog-icon").className = "w-14 h-14 rounded-full border-2 flex items-center justify-center text-2xl mx-auto " + s.cls;
+        $("dialog-icon").innerHTML = `<i class="fa-solid ${s.icon}"></i>`;
+        $("dialog-title").textContent = title;
+        $("dialog-text").textContent = text;
+        $("dialog-ok").textContent = okText;
+        $("dialog-ok").className = "flex-1 text-white font-bold py-3 rounded-xl text-sm shadow-lg " + (type === "warn" ? "bg-red-600 hover:bg-red-500" : "bg-gradient-to-r from-blue-500 to-blue-600");
+        $("dialog-cancel").classList.toggle("hidden", !confirm);
+        openModal("dialog-modal");
+        return new Promise(res => { dialogResolve = res; });
+    }
+    const notify = (title, text, type = "ok") => showDialog(title, text, { type });
+    const ask = (title, text, okText = "Sí, borrar") => showDialog(title, text, { type: "warn", confirm: true, okText });
+    $("dialog-ok").onclick = () => { closeModal("dialog-modal"); dialogResolve?.(true); };
+    $("dialog-cancel").onclick = () => { closeModal("dialog-modal"); dialogResolve?.(false); };
+
+    function firebaseErrorText(err) {
+        if (err?.code === "permission-denied") return "Tu cuenta no tiene permiso para esta acción. Revisá que el email esté cargado en las reglas de Firestore.";
+        if (err?.code === "unavailable") return "No hay conexión. Revisá internet e intentá de nuevo.";
+        return err?.message || "Ocurrió un error inesperado.";
+    }
+
+    // =====================================================================
+    //  NAVEGACIÓN
+    // =====================================================================
+    $("menu-btn").addEventListener("click", () => {
+        const open = $("mobile-menu").classList.toggle("hidden") === false;
+        $("menu-btn").setAttribute("aria-expanded", open);
+    });
+    document.querySelectorAll(".mobile-link").forEach(a => a.addEventListener("click", () => $("mobile-menu").classList.add("hidden")));
+    window.addEventListener("scroll", () => $("navbar").classList.toggle("shadow-2xl", window.scrollY > 10), { passive: true });
+
+    // =====================================================================
+    //  SERVICIOS Y PRECIOS
+    // =====================================================================
+    function renderServices() {
+        $("services-grid").innerHTML = SERVICES.map(s => {
+            const f = s.featured;
+            return `
+            <div class="${f ? "bg-gradient-to-b from-dark-800 to-dark-700 border-2 border-blue-500 shadow-xl shadow-blue-500/15 lg:-translate-y-2" : "bg-dark-800 border border-zinc-800 hover:border-blue-500/50 shadow-lg"} rounded-3xl p-6 sm:p-7 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+                ${f ? `<div class="absolute top-3 right-3 bg-blue-600 text-white font-bold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow">Más pedido</div>`
+                    : `<div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none group-hover:bg-blue-500/10 transition-colors"></div>`}
+                <div>
+                    <div class="w-12 h-12 rounded-2xl ${f ? "bg-blue-500 text-white" : "bg-blue-500/10 text-blue-400 border border-blue-500/20"} flex items-center justify-center text-xl mb-6"><i class="fa-solid ${s.icon}"></i></div>
+                    <h3 class="font-serif text-xl font-bold text-zinc-100 mb-2">${esc(s.name)}</h3>
+                    <p class="text-xs ${f ? "text-zinc-300" : "text-zinc-400"} mb-6 leading-relaxed">${esc(s.desc)}</p>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-4 pt-4 border-t ${f ? "border-zinc-600" : "border-zinc-700/60"}">
+                        <span class="text-xs text-zinc-400"><i class="fa-regular fa-clock mr-1"></i> ${s.dur} min</span>
+                        <span data-price="${esc(s.name)}" class="font-serif text-2xl font-bold text-blue-400">${money(prices[s.name])}</span>
+                    </div>
+                    <button data-book="${esc(s.name)}" class="w-full ${f ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white font-bold shadow-lg" : "bg-dark-700 hover:bg-blue-600 hover:text-white text-zinc-200 font-semibold shadow-md"} py-3 rounded-2xl transition-all text-sm">Reservar</button>
+                </div>
+            </div>`;
+        }).join("");
+
+        $("service-select").innerHTML = SERVICES.map(s => `<option value="${esc(s.name)}">${esc(s.name)} · ${s.dur} min</option>`).join("");
+        $("service-select").value = SERVICES.find(s => s.featured)?.name || SERVICES[0].name;
+    }
+
+    function updatePriceUI() {
+        document.querySelectorAll("[data-price]").forEach(el => el.textContent = money(prices[el.dataset.price]));
+        $("price-display").textContent = money(prices[$("service-select").value]);
+    }
+
+    $("services-grid").addEventListener("click", e => {
+        const b = e.target.closest("[data-book]");
+        if (!b) return;
+        $("service-select").value = b.dataset.book;
+        updatePriceUI();
+        $("reserva").scrollIntoView({ behavior: "smooth" });
+    });
+    $("service-select").addEventListener("change", updatePriceUI);
+
+    async function fetchPrices() {
+        try {
+            const doc = await db.collection("settings").doc("prices").get();
+            if (doc.exists) prices = { ...prices, ...doc.data() };
+        } catch (e) { console.warn("No se pudieron cargar los precios:", e); }
+        updatePriceUI();
+    }
+
+    async function fetchCertificate() {
+        try {
+            const doc = await db.collection("settings").doc("certificado").get();
+            if (doc.exists && doc.data().src) $("cert-img").src = doc.data().src;
+        } catch (e) { console.warn(e); }
+    }
+
+    // =====================================================================
+    //  RESERVAS
+    // =====================================================================
+    const dateInput = $("booking-date");
+    let slotsRequest = 0;
+
+    function initDate() {
+        const t = todayAR();
+        dateInput.min = t;
+        const max = parseDate(t); max.setDate(max.getDate() + 60);
+        dateInput.max = max.toLocaleDateString("en-CA");
+        let d = parseDate(t);
+        // Si hoy es domingo o ya pasó el último turno, sugerimos el próximo día hábil
+        const [lh, lm] = CONFIG.slots[CONFIG.slots.length - 1].split(":").map(Number);
+        if (d.getDay() === 0 || nowMinutesAR() >= lh * 60 + lm) {
+            do { d.setDate(d.getDate() + 1); } while (d.getDay() === 0);
+        }
+        dateInput.value = d.toLocaleDateString("en-CA");
+    }
+
+    async function refreshSlots() {
+        const date = dateInput.value;
+        const req = ++slotsRequest;
+        const box = $("slots");
+        const prev = document.querySelector('input[name="slot"]:checked')?.value;
+        $("date-label").textContent = date ? prettyDate(date) : "";
+
+        const closed = date && parseDate(date).getDay() === 0;
+        const outOfRange = date && (date < dateInput.min || date > dateInput.max);
+        let taken = new Set();
+
+        if (date && !closed && !outOfRange) {
+            box.innerHTML = `<p class="col-span-full text-xs text-zinc-500 py-3"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Buscando horarios libres…</p>`;
+            try {
+                const snap = await db.collection("ocupados").where("date", "==", date).get();
+                snap.forEach(d => taken.add(cleanTime(d.data().time)));
+            } catch (e) { console.warn("No se pudo consultar disponibilidad:", e); }
+            if (req !== slotsRequest) return; // llegó una consulta más nueva
         }
 
-        async function deleteTurno(id) {
-            if (confirm('¿Estás seguro de eliminar este turno?')) {
-                try {
-                    await db.collection('turnos').doc(id).delete();
-                    renderAdminTurnos();
-                } catch (error) {
-                    console.error("Error al eliminar el turno: ", error);
-                }
+        const isToday = date === todayAR();
+        const nowM = nowMinutesAR();
+        let free = 0;
+        box.innerHTML = CONFIG.slots.map(t => {
+            const [h, m] = t.split(":").map(Number);
+            const past = isToday && h * 60 + m <= nowM;
+            const busy = taken.has(t);
+            const disabled = !date || closed || outOfRange || past || busy;
+            if (!disabled) free++;
+            return `
+            <label class="block">
+                <input type="radio" name="slot" value="${t}" class="peer sr-only" ${disabled ? "disabled" : ""} ${!disabled && prev === t ? "checked" : ""}>
+                <span class="block text-center py-3 rounded-xl border text-sm font-semibold cursor-pointer transition-all
+                    border-zinc-700 bg-dark-800 text-zinc-200 hover:border-blue-500
+                    peer-checked:bg-blue-600 peer-checked:border-blue-500 peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-blue-500/25
+                    peer-focus-visible:ring-2 peer-focus-visible:ring-blue-400
+                    peer-disabled:opacity-35 peer-disabled:cursor-not-allowed peer-disabled:line-through peer-disabled:hover:border-zinc-700">${t}</span>
+            </label>`;
+        }).join("");
+
+        $("slots-hint").textContent =
+            !date ? "Elegí un día primero." :
+            outOfRange ? "Elegí una fecha dentro de los próximos 60 días." :
+            closed ? "Los domingos la barbería está cerrada. Elegí otro día." :
+            free === 0 ? "No quedan horarios libres para este día. Probá con otro." :
+            `${free} ${free === 1 ? "horario libre" : "horarios libres"}.`;
+    }
+    dateInput.addEventListener("change", refreshSlots);
+
+    $("booking-form").addEventListener("submit", async e => {
+        e.preventDefault();
+        const service = $("service-select").value;
+        const date = dateInput.value;
+        const time = document.querySelector('input[name="slot"]:checked')?.value;
+        const name = $("client-name").value.trim().replace(/\s+/g, " ");
+        const phone = $("client-phone").value.trim();
+        const price = Number(prices[service] || 0);
+
+        if (!date || parseDate(date).getDay() === 0) return notify("Elegí un día", "Seleccioná un día de lunes a sábado.", "error");
+        if (!time) return notify("Elegí un horario", "Tocá uno de los horarios disponibles.", "error");
+        if (name.length < 3) return notify("Falta tu nombre", "Escribí tu nombre y apellido.", "error");
+        if (phone.replace(/\D/g, "").length < 8) return notify("Revisá el teléfono", "Ingresá un número de WhatsApp válido, con código de área.", "error");
+
+        const btn = $("booking-submit");
+        btn.disabled = true;
+        btn.querySelector("span").textContent = "Reservando…";
+
+        const slotId = `${date}_${time}`;
+        try {
+            const occ = await db.collection("ocupados").doc(slotId).get();
+            if (occ.exists) throw { code: "slot-taken" };
+
+            const batch = db.batch();
+            batch.set(db.collection("ocupados").doc(slotId), { date, time });
+            batch.set(db.collection("turnos").doc(slotId), { service, date, time, name, phone, price, createdAt: serverTime() });
+            await batch.commit();
+
+            $("success-details").innerHTML = `¡Gracias <strong>${esc(name)}</strong>! Tu turno de <strong>${esc(service)}</strong> (${money(price)}) quedó para el <strong>${esc(prettyDate(date))}</strong> a las <strong>${esc(time)} hs</strong>.`;
+            $("whatsapp-confirm-btn").href = waLink(`Hola Lucas! Reservé un turno online:\n• ${service} (${money(price)})\n• ${prettyDate(date)} a las ${time} hs\nMi nombre es ${name} (${phone}).`);
+            $("booking-form").classList.add("hidden");
+            $("booking-success").classList.remove("hidden");
+            $("reserva").scrollIntoView({ behavior: "smooth" });
+        } catch (err) {
+            console.error("Error al reservar:", err);
+            if (err.code === "slot-taken" || err.code === "permission-denied") {
+                notify("Horario ocupado", "Alguien acaba de reservar ese horario. Elegí otro, por favor.", "error");
+                refreshSlots();
+            } else {
+                notify("No se pudo reservar", "Hubo un problema al registrar el turno. Revisá tu conexión o escribile a Lucas por WhatsApp.", "error");
             }
+        } finally {
+            btn.disabled = false;
+            btn.querySelector("span").textContent = "Confirmar turno";
+        }
+    });
+
+    $("booking-reset").addEventListener("click", () => {
+        $("booking-form").reset();
+        renderServices();
+        updatePriceUI();
+        initDate();
+        refreshSlots();
+        $("booking-form").classList.remove("hidden");
+        $("booking-success").classList.add("hidden");
+    });
+
+    // =====================================================================
+    //  CARRUSEL DE TRABAJOS
+    // =====================================================================
+    let photos = [];
+
+    const carousel = (() => {
+        const track = $("car-track");
+        let idx = 0, timer = null, paused = false, scrollT = null;
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        function slides() { return [...track.querySelectorAll(".slide")]; }
+
+        function render() {
+            if (!photos.length) {
+                track.innerHTML = `<div class="w-full text-center text-zinc-500 py-24">Todavía no hay fotos cargadas.</div>`;
+                $("car-dots").innerHTML = ""; $("car-counter").textContent = "";
+                return;
+            }
+            track.innerHTML = photos.map((p, i) => `
+                <figure class="slide relative snap-center shrink-0 w-[82%] sm:w-[48%] lg:w-[32%] aspect-[4/5] rounded-3xl overflow-hidden border border-zinc-800 bg-dark-800 shadow-lg cursor-zoom-in group" data-i="${i}" role="group" aria-label="Foto ${i + 1} de ${photos.length}">
+                    <img src="${esc(p.src)}" alt="${esc(p.caption || p.category || "Corte de pelo")}" loading="${i < 3 ? "eager" : "lazy"}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" draggable="false">
+                    <figcaption class="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-dark-900 via-dark-900/60 to-transparent pt-16">
+                        ${p.category ? `<span class="text-[11px] text-blue-400 uppercase tracking-widest font-semibold">${esc(p.category)}</span>` : ""}
+                        ${p.caption ? `<h4 class="font-serif text-lg font-bold text-zinc-100">${esc(p.caption)}</h4>` : ""}
+                    </figcaption>
+                    <span class="absolute top-3 right-3 w-9 h-9 rounded-full bg-dark-900/70 text-zinc-200 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-expand"></i></span>
+                </figure>`).join("");
+
+            $("car-dots").innerHTML = photos.length > 1 ? photos.map((_, i) =>
+                `<button data-dot="${i}" aria-label="Ir a la foto ${i + 1}" class="h-2 rounded-full transition-all bg-zinc-700 w-2"></button>`).join("") : "";
+            idx = 0; track.scrollLeft = 0; mark();
+            start();
         }
 
-        async function clearAllTurnos() {
-            if (confirm('¿Estás seguro de borrar TODOS los turnos de la base de datos?')) {
-                try {
-                    const querySnapshot = await db.collection('turnos').get();
-                    const batch = db.batch();
-                    querySnapshot.forEach((doc) => {
-                        batch.delete(doc.ref);
-                    });
-                    await batch.commit();
-                    renderAdminTurnos();
-                } catch (error) {
-                    console.error("Error al borrar todos los turnos: ", error);
-                }
-            }
+        function goTo(i) {
+            const s = slides(); if (!s.length) return;
+            idx = (i + s.length) % s.length;
+            const el = s[idx];
+            track.scrollTo({ left: el.offsetLeft - (track.clientWidth - el.clientWidth) / 2, behavior: reduce ? "auto" : "smooth" });
+            mark();
         }
 
-        window.onload = () => {
-            fetchPrices();
-        };
+        function mark() {
+            document.querySelectorAll("[data-dot]").forEach((d, i) => {
+                d.classList.toggle("bg-blue-500", i === idx); d.classList.toggle("w-6", i === idx);
+                d.classList.toggle("bg-zinc-700", i !== idx); d.classList.toggle("w-2", i !== idx);
+            });
+            $("car-counter").textContent = photos.length ? `${idx + 1} / ${photos.length}` : "";
+        }
+
+        function nearest() {
+            const center = track.scrollLeft + track.clientWidth / 2;
+            let best = 0, dist = Infinity;
+            slides().forEach((s, i) => { const d = Math.abs(s.offsetLeft + s.clientWidth / 2 - center); if (d < dist) { dist = d; best = i; } });
+            return best;
+        }
+
+        function start() {
+            stop();
+            if (reduce || photos.length < 2) return;
+            timer = setInterval(() => { if (!paused && !document.hidden) goTo(idx + 1); }, 4500);
+        }
+        function stop() { clearInterval(timer); timer = null; }
+
+        track.addEventListener("scroll", () => { clearTimeout(scrollT); scrollT = setTimeout(() => { idx = nearest(); mark(); }, 80); }, { passive: true });
+        track.addEventListener("mouseenter", () => paused = true);
+        track.addEventListener("mouseleave", () => paused = false);
+        track.addEventListener("touchstart", () => { paused = true; }, { passive: true });
+        track.addEventListener("touchend", () => { setTimeout(() => paused = false, 4000); }, { passive: true });
+        track.addEventListener("keydown", e => { if (e.key === "ArrowRight") { e.preventDefault(); goTo(idx + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); goTo(idx - 1); } });
+        track.addEventListener("click", e => { const s = e.target.closest(".slide"); if (s) lightbox.open(Number(s.dataset.i)); });
+        $("car-prev").onclick = () => goTo(idx - 1);
+        $("car-next").onclick = () => goTo(idx + 1);
+        $("car-dots").addEventListener("click", e => { const d = e.target.closest("[data-dot]"); if (d) goTo(Number(d.dataset.dot)); });
+
+        return { render, pause: () => paused = true, resume: () => paused = false };
+    })();
+
+    const lightbox = (() => {
+        let i = 0, touchX = null;
+        function show() {
+            const p = photos[i]; if (!p) return;
+            $("lb-img").src = p.src; $("lb-img").alt = p.caption || p.category || "Corte";
+            $("lb-cat").textContent = p.category || ""; $("lb-caption").textContent = p.caption || "";
+            const multi = photos.length > 1;
+            $("lb-prev").classList.toggle("hidden", !multi); $("lb-next").classList.toggle("hidden", !multi);
+        }
+        function open(n) { i = n; show(); carousel.pause(); openModal("lightbox"); }
+        function step(d) { i = (i + d + photos.length) % photos.length; show(); }
+        $("lb-prev").onclick = e => { e.stopPropagation(); step(-1); };
+        $("lb-next").onclick = e => { e.stopPropagation(); step(1); };
+        document.addEventListener("keydown", e => {
+            if ($("lightbox").classList.contains("hidden")) return;
+            if (e.key === "ArrowRight") step(1);
+            if (e.key === "ArrowLeft") step(-1);
+        });
+        $("lightbox").addEventListener("touchstart", e => touchX = e.touches[0].clientX, { passive: true });
+        $("lightbox").addEventListener("touchend", e => {
+            if (touchX === null) return;
+            const dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+            touchX = null;
+        });
+        return { open };
+    })();
+
+    async function loadGallery() {
+        try {
+            const snap = await db.collection("galeria").orderBy("createdAt", "desc").limit(CONFIG.galleryLimit).get();
+            photos = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.src);
+        } catch (e) {
+            console.warn("No se pudo cargar la galería:", e);
+            photos = [];
+        }
+        const usingFallback = photos.length === 0;
+        if (usingFallback) photos = FALLBACK_PHOTOS;
+        $("gallery-subtitle").textContent = usingFallback
+            ? "Muy pronto vas a ver acá los trabajos de Lucas. Mientras tanto, algunas ideas de estilos."
+            : "Trabajos reales hechos en la barbería. Tocá una foto para verla en grande.";
+        carousel.render();
+    }
+
+    // =====================================================================
+    //  CONTACTO
+    // =====================================================================
+    function initContact() {
+        const q = encodeURIComponent(CONFIG.address);
+        $("address-text").textContent = CONFIG.address;
+        $("map-frame").src = `https://www.google.com/maps?q=${q}&z=15&output=embed`;
+        $("maps-link").href = `https://www.google.com/maps/search/?api=1&query=${q}`;
+        const hello = waLink("Hola Lucas, quiero hacer una consulta sobre los turnos.");
+        $("wa-contact").href = hello; $("wa-float").href = hello;
+        $("year").textContent = new Date().getFullYear();
+    }
+
+    // =====================================================================
+    //  ADMIN: LOGIN (Firebase Authentication)
+    // =====================================================================
+    $("admin-open").addEventListener("click", () => {
+        if (auth.currentUser) return openAdmin();
+        $("login-error").classList.add("hidden");
+        $("login-pass").value = "";
+        openModal("login-modal");
+        setTimeout(() => $("login-email").focus(), 100);
+    });
+
+    const AUTH_ERRORS = {
+        "auth/invalid-credential": "Email o contraseña incorrectos.",
+        "auth/invalid-login-credentials": "Email o contraseña incorrectos.",
+        "auth/wrong-password": "Email o contraseña incorrectos.",
+        "auth/user-not-found": "Email o contraseña incorrectos.",
+        "auth/invalid-email": "El email no es válido.",
+        "auth/too-many-requests": "Demasiados intentos. Esperá unos minutos y probá de nuevo.",
+        "auth/network-request-failed": "Sin conexión a internet.",
+        "auth/operation-not-allowed": "Falta activar el inicio de sesión con Email/Contraseña en Firebase."
+    };
+
+    $("login-form").addEventListener("submit", async e => {
+        e.preventDefault();
+        const btn = $("login-submit"); btn.disabled = true; btn.textContent = "Ingresando…";
+        try {
+            await auth.signInWithEmailAndPassword($("login-email").value.trim(), $("login-pass").value);
+            closeModal("login-modal");
+            openAdmin();
+        } catch (err) {
+            $("login-error").textContent = AUTH_ERRORS[err.code] || "No se pudo ingresar: " + err.message;
+            $("login-error").classList.remove("hidden");
+        } finally { btn.disabled = false; btn.textContent = "Ingresar"; }
+    });
+
+    $("forgot-pass").addEventListener("click", async () => {
+        const email = $("login-email").value.trim();
+        if (!email) { $("login-error").textContent = "Escribí tu email arriba y volvé a tocar \"Olvidé mi contraseña\"."; $("login-error").classList.remove("hidden"); return; }
+        try { await auth.sendPasswordResetEmail(email); } catch (e) { console.warn(e); }
+        notify("Revisá tu correo", "Si el email está registrado, te llegó un enlace para crear una contraseña nueva.");
+    });
+
+    $("logout-btn").addEventListener("click", async () => { await auth.signOut(); closeModal("admin-modal"); });
+
+    // =====================================================================
+    //  ADMIN: PANEL
+    // =====================================================================
+    let activeTab = "turnos";
+    let turnosFilter = "proximos";
+    let allTurnos = [];
+
+    function openAdmin() {
+        $("admin-email").textContent = auth.currentUser?.email ? "Sesión: " + auth.currentUser.email : "";
+        switchTab(activeTab);
+        openModal("admin-modal");
+    }
+
+    function switchTab(tab) {
+        activeTab = tab;
+        document.querySelectorAll(".admin-tab").forEach(b => {
+            const on = b.dataset.tab === tab;
+            b.classList.toggle("bg-blue-600", on); b.classList.toggle("text-white", on); b.classList.toggle("text-zinc-400", !on);
+        });
+        document.querySelectorAll(".admin-panel").forEach(p => p.classList.toggle("hidden", p.id !== "tab-" + tab));
+        if (tab === "turnos") loadTurnos();
+        if (tab === "fotos") { renderAdminPhotos(); loadCertPreview(); }
+        if (tab === "precios") renderAdminPrices();
+    }
+    document.querySelectorAll(".admin-tab").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab)));
+
+    // ---------- Turnos ----------
+    function turnoKey(t) { return `${t.date} ${cleanTime(t.time).padStart(5, "0")}`; }
+    function isPast(t) {
+        const today = todayAR();
+        if (t.date < today) return true;
+        if (t.date > today) return false;
+        const [h, m] = cleanTime(t.time).split(":").map(Number);
+        return (h * 60 + (m || 0)) + 60 < nowMinutesAR();
+    }
+
+    async function loadTurnos() {
+        const box = $("admin-turnos-list");
+        box.innerHTML = `<p class="text-zinc-400 text-sm text-center py-6"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Cargando turnos…</p>`;
+        try {
+            const snap = await db.collection("turnos").get();
+            allTurnos = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => turnoKey(a).localeCompare(turnoKey(b)));
+            renderTurnos();
+        } catch (err) {
+            console.error(err);
+            box.innerHTML = `<p class="text-red-400 text-sm text-center py-6">${esc(firebaseErrorText(err))}</p>`;
+        }
+    }
+
+    function renderTurnos() {
+        document.querySelectorAll(".turnos-filter").forEach(b => {
+            const on = b.dataset.filter === turnosFilter;
+            b.classList.toggle("bg-dark-700", on); b.classList.toggle("text-white", on); b.classList.toggle("text-zinc-400", !on);
+        });
+        let list = allTurnos.filter(t => turnosFilter === "pasados" ? isPast(t) : !isPast(t));
+        if (turnosFilter === "pasados") list = list.reverse();
+        $("turnos-count").textContent = `${list.length} ${list.length === 1 ? "turno" : "turnos"}`;
+
+        const box = $("admin-turnos-list");
+        if (!list.length) {
+            box.innerHTML = `<p class="text-zinc-500 text-sm text-center py-10">${turnosFilter === "pasados" ? "No hay turnos anteriores." : "No hay turnos próximos."}</p>`;
+            return;
+        }
+        let lastDate = null;
+        box.innerHTML = list.map(t => {
+            const time = cleanTime(t.time);
+            const header = t.date !== lastDate ? `<h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 pt-2 capitalize">${esc(t.date === todayAR() ? "Hoy · " + prettyDate(t.date) : prettyDate(t.date))}</h4>` : "";
+            lastDate = t.date;
+            const msg = `Hola ${t.name}, te escribo de Lucas Robledo Barbershop por tu turno del ${prettyDate(t.date)} a las ${time} hs.`;
+            return `${header}
+            <div class="bg-dark-900 border border-zinc-700/80 p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="flex items-center gap-4">
+                    <div class="text-center bg-blue-500/10 border border-blue-500/20 rounded-xl px-3 py-2 min-w-[64px]">
+                        <span class="block font-bold text-blue-400 text-base leading-none">${esc(time)}</span><span class="text-[10px] text-zinc-500">hs</span>
+                    </div>
+                    <div>
+                        <span class="font-bold text-zinc-100 text-sm">${esc(t.name)}</span>
+                        <p class="text-xs text-zinc-300 mt-0.5">${esc(t.service)}${t.price ? " · " + money(t.price) : ""}</p>
+                        <p class="text-[11px] text-zinc-500 mt-0.5"><i class="fa-solid fa-phone text-[10px] mr-1"></i>${esc(t.phone)}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <a href="https://wa.me/${normalizePhone(t.phone)}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" class="text-emerald-400 text-xs bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-2 rounded-xl border border-emerald-500/20 flex items-center gap-1.5 font-medium"><i class="fa-brands fa-whatsapp text-sm"></i> Contactar</a>
+                    <button data-del-turno="${esc(t.id)}" class="text-red-400 text-xs bg-red-500/10 hover:bg-red-500/20 px-3 py-2 rounded-xl border border-red-500/20 font-medium">Eliminar</button>
+                </div>
+            </div>`;
+        }).join("");
+    }
+
+    document.querySelectorAll(".turnos-filter").forEach(b => b.addEventListener("click", () => { turnosFilter = b.dataset.filter; renderTurnos(); }));
+
+    function deleteTurnoOps(batch, t) {
+        batch.delete(db.collection("turnos").doc(t.id));
+        batch.delete(db.collection("ocupados").doc(`${t.date}_${cleanTime(t.time)}`));
+    }
+
+    $("admin-turnos-list").addEventListener("click", async e => {
+        const b = e.target.closest("[data-del-turno]"); if (!b) return;
+        const t = allTurnos.find(x => x.id === b.dataset.delTurno); if (!t) return;
+        if (!(await ask("¿Eliminar turno?", `${t.name} · ${prettyDate(t.date)} ${cleanTime(t.time)} hs. El horario vuelve a quedar libre.`))) return;
+        try {
+            const batch = db.batch(); deleteTurnoOps(batch, t); await batch.commit();
+            allTurnos = allTurnos.filter(x => x.id !== t.id); renderTurnos(); refreshSlots();
+        } catch (err) { notify("Error", firebaseErrorText(err), "error"); }
+    });
+
+    $("clear-past").addEventListener("click", async () => {
+        const past = allTurnos.filter(isPast);
+        if (!past.length) return notify("Nada para borrar", "No hay turnos anteriores.");
+        if (!(await ask("¿Borrar turnos anteriores?", `Se van a borrar ${past.length} turnos que ya pasaron. Los próximos no se tocan.`))) return;
+        try {
+            for (let i = 0; i < past.length; i += 200) {
+                const batch = db.batch(); past.slice(i, i + 200).forEach(t => deleteTurnoOps(batch, t)); await batch.commit();
+            }
+            await loadTurnos();
+            notify("Listo", "Se borraron los turnos anteriores.");
+        } catch (err) { notify("Error", firebaseErrorText(err), "error"); }
+    });
+
+    // ---------- Precios ----------
+    function renderAdminPrices() {
+        $("admin-prices-container").innerHTML = SERVICES.map((s, i) => `
+            <div class="bg-dark-900 p-3 rounded-xl border border-zinc-700">
+                <label for="price-in-${i}" class="block text-xs font-semibold text-zinc-300 mb-1">${esc(s.name)}</label>
+                <div class="flex items-center bg-dark-800 border border-zinc-700 rounded-lg focus-within:border-blue-500">
+                    <span class="pl-3 text-zinc-500 text-sm">$</span>
+                    <input type="number" id="price-in-${i}" data-service="${esc(s.name)}" min="0" step="500" inputmode="numeric" value="${Number(prices[s.name] || 0)}" class="w-full bg-transparent px-2 py-2 text-zinc-100 text-sm focus:outline-none">
+                </div>
+            </div>`).join("");
+    }
+
+    $("save-prices").addEventListener("click", async () => {
+        const updated = {};
+        for (const input of $("admin-prices-container").querySelectorAll("input[data-service]")) {
+            const v = Number(input.value);
+            if (!Number.isFinite(v) || v < 0) return notify("Precio inválido", `Revisá el precio de "${input.dataset.service}".`, "error");
+            updated[input.dataset.service] = Math.round(v);
+        }
+        try {
+            await db.collection("settings").doc("prices").set(updated);
+            prices = { ...prices, ...updated };
+            updatePriceUI();
+            notify("¡Precios actualizados!", "Los nuevos valores ya se ven en la web.");
+        } catch (err) { notify("Error", firebaseErrorText(err), "error"); }
+    });
+
+    // ---------- Fotos ----------
+    let pending = []; // { file, url }
+
+    function compressImage(file, maxSide = 1280) {
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.onload = () => {
+                URL.revokeObjectURL(url);
+                const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+                const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
+                const canvas = document.createElement("canvas");
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext("2d");
+                ctx.fillStyle = "#000"; ctx.fillRect(0, 0, w, h);
+                ctx.drawImage(img, 0, 0, w, h);
+                let q = 0.8, data = canvas.toDataURL("image/jpeg", q);
+                while (data.length > 700000 && q > 0.4) { q -= 0.1; data = canvas.toDataURL("image/jpeg", q); }
+                if (data.length > 950000) return reject(new Error("La foto es demasiado pesada incluso comprimida."));
+                resolve(data);
+            };
+            img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("No se pudo leer la imagen (formato no compatible).")); };
+            img.src = url;
+        });
+    }
+
+    function renderPending() {
+        $("pending-photos").innerHTML = pending.map((p, i) => `
+            <div class="bg-dark-800 border border-zinc-700 rounded-xl overflow-hidden">
+                <div class="relative aspect-square">
+                    <img src="${p.url}" alt="" class="w-full h-full object-cover">
+                    <button data-rm-pending="${i}" aria-label="Quitar" class="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-dark-900/80 text-zinc-200 text-xs"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <input type="text" data-caption="${i}" maxlength="60" placeholder="Título (opcional)" value="${esc(p.caption || "")}" class="w-full bg-dark-900 border-t border-zinc-700 px-2.5 py-2 text-xs text-zinc-100 focus:outline-none">
+            </div>`).join("");
+        const show = pending.length > 0;
+        $("pending-actions").classList.toggle("hidden", !show);
+        $("pending-actions").classList.toggle("flex", show);
+    }
+
+    $("photo-input").addEventListener("change", e => {
+        [...e.target.files].filter(f => f.type.startsWith("image/") || /\.(heic|heif)$/i.test(f.name))
+            .forEach(file => pending.push({ file, url: URL.createObjectURL(file), caption: "" }));
+        e.target.value = "";
+        $("upload-status").textContent = "";
+        renderPending();
+    });
+    $("pending-photos").addEventListener("input", e => { const i = e.target.dataset.caption; if (i !== undefined) pending[i].caption = e.target.value; });
+    $("pending-photos").addEventListener("click", e => {
+        const b = e.target.closest("[data-rm-pending]"); if (!b) return;
+        const [p] = pending.splice(Number(b.dataset.rmPending), 1); URL.revokeObjectURL(p.url); renderPending();
+    });
+    $("pending-clear").addEventListener("click", () => { pending.forEach(p => URL.revokeObjectURL(p.url)); pending = []; renderPending(); });
+
+    $("upload-btn").addEventListener("click", async () => {
+        if (!pending.length) return;
+        const btn = $("upload-btn"); btn.disabled = true;
+        const category = $("photo-category").value;
+        const total = pending.length; let ok = 0; const failed = [];
+        for (let i = 0; i < total; i++) {
+            const p = pending[i];
+            $("upload-status").innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Subiendo ${i + 1} de ${total}…`;
+            try {
+                const src = await compressImage(p.file);
+                await db.collection("galeria").add({ src, caption: (p.caption || "").trim().slice(0, 60), category, createdAt: serverTime() });
+                ok++;
+            } catch (err) {
+                console.error(err);
+                failed.push(p.file.name + ": " + (err.code === "permission-denied" ? "sin permiso" : err.message));
+            }
+        }
+        pending.forEach(p => URL.revokeObjectURL(p.url)); pending = []; renderPending();
+        btn.disabled = false;
+        $("upload-status").textContent = ok ? `✓ ${ok} ${ok === 1 ? "foto subida" : "fotos subidas"}.` : "";
+        if (failed.length) notify("Algunas fotos no se subieron", failed.join("\n"), "error");
+        await loadGallery();
+        renderAdminPhotos();
+    });
+
+    function renderAdminPhotos() {
+        const real = photos.filter(p => p.id);
+        $("photos-count").textContent = `${real.length} ${real.length === 1 ? "foto" : "fotos"}${real.length >= CONFIG.galleryLimit ? ` (se muestran las ${CONFIG.galleryLimit} más nuevas)` : ""}`;
+        $("admin-photos").innerHTML = real.length ? real.map(p => `
+            <div class="relative group rounded-xl overflow-hidden border border-zinc-700 aspect-square bg-dark-900">
+                <img src="${esc(p.src)}" alt="" class="w-full h-full object-cover">
+                <div class="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-dark-900 to-transparent">
+                    <p class="text-[10px] text-blue-400 uppercase tracking-wider truncate">${esc(p.category || "")}</p>
+                    <p class="text-xs text-zinc-100 truncate">${esc(p.caption || "")}</p>
+                </div>
+                <button data-del-photo="${esc(p.id)}" aria-label="Borrar foto" class="absolute top-1.5 right-1.5 w-8 h-8 rounded-full bg-red-600/90 hover:bg-red-500 text-white text-xs shadow"><i class="fa-solid fa-trash"></i></button>
+            </div>`).join("")
+            : `<p class="col-span-full text-zinc-500 text-sm text-center py-8">Todavía no subiste fotos. Mientras tanto, el carrusel muestra imágenes de ejemplo.</p>`;
+    }
+
+    $("admin-photos").addEventListener("click", async e => {
+        const b = e.target.closest("[data-del-photo]"); if (!b) return;
+        if (!(await ask("¿Borrar esta foto?", "Se va a quitar del carrusel de la web."))) return;
+        try { await db.collection("galeria").doc(b.dataset.delPhoto).delete(); await loadGallery(); renderAdminPhotos(); }
+        catch (err) { notify("Error", firebaseErrorText(err), "error"); }
+    });
+
+    function loadCertPreview() { $("admin-cert-preview").src = $("cert-img").src; }
+    $("cert-input").addEventListener("change", async e => {
+        const file = e.target.files[0]; e.target.value = "";
+        if (!file) return;
+        try {
+            const src = await compressImage(file, 1200);
+            await db.collection("settings").doc("certificado").set({ src, updatedAt: serverTime() });
+            $("cert-img").src = src; loadCertPreview();
+            notify("Certificado actualizado", "La foto nueva ya se ve en la sección \"Sobre mí\".");
+        } catch (err) { notify("Error", firebaseErrorText(err), "error"); }
+    });
+
+    // =====================================================================
+    //  INICIO
+    // =====================================================================
+    renderServices();
+    updatePriceUI();
+    initDate();
+    initContact();
+    refreshSlots();
+    fetchPrices();
+    fetchCertificate();
+    loadGallery();
     </script>
 </body>
 </html>
